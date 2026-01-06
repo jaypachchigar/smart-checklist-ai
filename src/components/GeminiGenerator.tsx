@@ -1,56 +1,26 @@
 /**
  * GeminiGenerator Component
  * AI-powered task generation using Google Gemini API
- * - User enters API key
  * - User provides prompt
- * - Makes real API call to Gemini
+ * - Backend handles API call (no API key needed)
  * - Normalizes and inserts tasks
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { generateTasks } from '../utils/gemini';
 import { parseGeminiResponse, normalizeTasks } from '../utils/normalizeTasks';
 import { ChecklistItem } from '../types';
-
-const STORAGE_KEY_API_KEY = 'gemini-api-key';
 
 interface GeminiGeneratorProps {
   onTasksGenerated: (tasks: ChecklistItem[]) => void;
 }
 
 export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
-  // Load API key from localStorage on mount
-  const [apiKey, setApiKey] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY_API_KEY) || '';
-    } catch {
-      return '';
-    }
-  });
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showApiKey, setShowApiKey] = useState(false);
-
-  // Save API key to localStorage whenever it changes
-  useEffect(() => {
-    try {
-      if (apiKey.trim()) {
-        localStorage.setItem(STORAGE_KEY_API_KEY, apiKey.trim());
-      } else {
-        localStorage.removeItem(STORAGE_KEY_API_KEY);
-      }
-    } catch (error) {
-      console.error('Failed to save API key to localStorage:', error);
-    }
-  }, [apiKey]);
 
   const handleGenerate = async () => {
-    if (!apiKey.trim()) {
-      setError('Please enter your Google AI API key');
-      return;
-    }
-
     if (!prompt.trim()) {
       setError('Please enter a prompt describing the tasks you need');
       return;
@@ -60,10 +30,9 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
     setIsLoading(true);
 
     try {
-      // Call the real Gemini API
+      // Call backend API (no API key needed)
       const responseText = await generateTasks({
         prompt: prompt.trim(),
-        apiKey: apiKey.trim(),
       });
 
       // Parse the response
@@ -98,39 +67,6 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
       <h2 className="text-2xl font-bold mb-4 text-gray-800">AI Task Generator</h2>
 
       <div className="space-y-4">
-        {/* API Key input */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Google AI API Key
-            <a
-              href="https://makersuite.google.com/app/apikey"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-2 text-blue-600 hover:underline text-xs"
-            >
-              (Get one here)
-            </a>
-          </label>
-          <div className="relative">
-            <input
-              type={showApiKey ? 'text' : 'password'}
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Enter your API key..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-20"
-            />
-            <button
-              onClick={() => setShowApiKey(!showApiKey)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 text-sm"
-            >
-              {showApiKey ? 'Hide' : 'Show'}
-            </button>
-          </div>
-          <p className="mt-1 text-xs text-gray-500">
-            Your API key is stored locally and never sent anywhere except to Google's servers.
-          </p>
-        </div>
-
         {/* Prompt input */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -186,9 +122,9 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
         {/* Info box */}
         <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-800">
-            <strong>How it works:</strong> Enter a description of what you need, and Gemini
+            <strong>How it works:</strong> Enter a description of what you need, and AI
             will generate 5-8 actionable tasks for you. The tasks will be automatically
-            cleaned and added to your checklist.
+            cleaned and added to your checklist. No API key needed!
           </p>
         </div>
       </div>

@@ -21,9 +21,9 @@ A production-quality React application for building intelligent checklists with 
    - Reset progress functionality
 
 3. **AI Task Generation**
-   - Integration with Google Gemini API (gemini-1.5-flash model)
-   - Real API calls (no mocks)
-   - User-provided API key for security
+   - Integration with Google Gemini API (gemini-1.5-flash-latest model)
+   - Real API calls via serverless backend (no mocks)
+   - No API key needed by users - handled securely on server
    - Intelligent task normalization:
      - Removes numbering and bullets
      - Trims whitespace
@@ -48,21 +48,22 @@ A production-quality React application for building intelligent checklists with 
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
 - **@dnd-kit** - Drag-and-drop functionality
-- **@google/generative-ai** - Official Google Gemini SDK
+- **Vercel Serverless Functions** - Backend API for Gemini
+- **Google Gemini API** - AI task generation
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 16+ (Note: Node.js 20.19+ or 22.12+ recommended for latest features)
+- Node.js 16+ (Note: Node.js 18+ recommended for full compatibility)
 - npm or yarn
-- Google AI API key ([Get one here](https://makersuite.google.com/app/apikey))
+- Google AI API key ([Get one here](https://makersuite.google.com/app/apikey)) - for deployment only
 
-### Installation
+### Local Development
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/jaypachchigar/smart-checklist-ai.git
 cd smart-checklist-ai
 ```
 
@@ -71,12 +72,55 @@ cd smart-checklist-ai
 npm install
 ```
 
-3. Start the development server:
+3. Create environment file:
+```bash
+cp .env.example .env
+```
+
+4. Add your Gemini API key to `.env`:
+```
+GEMINI_API_KEY=your_api_key_here
+```
+
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Open your browser to `http://localhost:5173`
+6. Open your browser to `http://localhost:5173`
+
+**Note:** In local development, the AI feature will only work when deployed or when using a local serverless function runtime.
+
+### Deployment to Vercel
+
+This application is designed to be deployed on Vercel with serverless functions.
+
+1. **Install Vercel CLI** (optional):
+```bash
+npm i -g vercel
+```
+
+2. **Deploy to Vercel:**
+
+   **Option A: Using GitHub (Recommended)**
+   - Push your code to GitHub
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Add environment variable: `GEMINI_API_KEY`
+   - Deploy!
+
+   **Option B: Using Vercel CLI**
+   ```bash
+   vercel
+   ```
+   - Follow the prompts
+   - Add your `GEMINI_API_KEY` as an environment variable in Vercel dashboard
+
+3. **Set Environment Variable:**
+   - Go to your Vercel project settings
+   - Navigate to "Environment Variables"
+   - Add: `GEMINI_API_KEY` = `your_api_key_here`
+   - Redeploy if already deployed
 
 ### Building for Production
 
