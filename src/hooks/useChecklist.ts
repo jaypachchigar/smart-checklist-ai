@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { ChecklistItem, ChecklistState, RunnerState } from '../types';
+import { ChecklistItem } from '../types';
 
 const STORAGE_KEY_CHECKLIST = 'smart-checklist-items';
 const STORAGE_KEY_RUNNER = 'smart-checklist-runner';
