@@ -8,6 +8,7 @@
 
 import { ChecklistItem } from '../types';
 import { useDependencies } from '../hooks/useDependencies';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface AnalyticsPanelProps {
   items: ChecklistItem[];
@@ -23,6 +24,7 @@ export function AnalyticsPanel({
   importData,
 }: AnalyticsPanelProps) {
   const { hiddenItems } = useDependencies(items, completedIds);
+  const { theme } = useTheme();
 
   const totalSteps = items.length;
   const completedSteps = Array.from(completedIds).filter((id) =>
@@ -66,63 +68,106 @@ export function AnalyticsPanel({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Analytics & Export</h2>
+    <div className={`backdrop-blur-sm rounded-lg border p-4 ${
+      theme === 'dark'
+        ? 'bg-slate-800/20 border-slate-700/20'
+        : 'bg-white/60 border-slate-300/50'
+    }`}>
+      <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+        {/* Stats - spread horizontally */}
+        <div className="flex-1 grid grid-cols-3 gap-4">
+          <div className="flex items-center gap-3">
+            <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center border ${
+              theme === 'dark'
+                ? 'bg-slate-700/30 border-slate-600/20'
+                : 'bg-slate-200/50 border-slate-300/30'
+            }`}>
+              <svg className={`w-5 h-5 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <div>
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Total</p>
+              <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-900'}`}>{totalSteps}</p>
+            </div>
+          </div>
 
-      {/* Analytics cards */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-sm text-blue-600 font-medium mb-1">Total Steps</p>
-          <p className="text-3xl font-bold text-blue-900">{totalSteps}</p>
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+              <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Completed</p>
+              <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'}`}>{completedSteps}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
+              <svg className="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <div>
+              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Locked</p>
+              <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-amber-400' : 'text-amber-600'}`}>{hiddenSteps}</p>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <p className="text-sm text-green-600 font-medium mb-1">Completed</p>
-          <p className="text-3xl font-bold text-green-900">{completedSteps}</p>
+        {/* Progress bar */}
+        <div className="flex-1 flex items-center gap-3">
+          <div className="flex-1">
+            <div className={`flex justify-between text-xs mb-1.5 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>
+              <span className="font-medium">Progress</span>
+              <span className={`font-semibold ${theme === 'dark' ? 'text-slate-400' : 'text-slate-700'}`}>{completionPercentage.toFixed(0)}%</span>
+            </div>
+            <div className={`w-full rounded-full h-2 overflow-hidden border ${
+              theme === 'dark'
+                ? 'bg-slate-700/30 border-slate-600/20'
+                : 'bg-slate-200/50 border-slate-300/30'
+            }`}>
+              <div
+                className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full transition-all duration-500"
+                style={{ width: `${completionPercentage}%` }}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p className="text-sm text-yellow-600 font-medium mb-1">Hidden</p>
-          <p className="text-3xl font-bold text-yellow-900">{hiddenSteps}</p>
+        {/* Export/Import buttons - compact */}
+        <div className="flex gap-2">
+          <button
+            onClick={handleExport}
+            className={`px-4 py-2 rounded-lg transition-all text-sm font-medium border flex items-center gap-2 ${
+              theme === 'dark'
+                ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 hover:text-slate-100 border-slate-600/30'
+                : 'bg-slate-200/50 hover:bg-slate-300/60 text-slate-700 hover:text-slate-900 border-slate-300/40'
+            }`}
+            title="Export Checklist"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span className="hidden xl:inline">Export</span>
+          </button>
+          <button
+            onClick={handleImport}
+            className={`px-4 py-2 rounded-lg transition-all text-sm font-medium border flex items-center gap-2 ${
+              theme === 'dark'
+                ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 hover:text-slate-100 border-slate-600/30'
+                : 'bg-slate-200/50 hover:bg-slate-300/60 text-slate-700 hover:text-slate-900 border-slate-300/40'
+            }`}
+            title="Import Checklist"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <span className="hidden xl:inline">Import</span>
+          </button>
         </div>
-      </div>
-
-      {/* Completion percentage */}
-      <div className="mb-6">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>Overall Completion</span>
-          <span>{completionPercentage.toFixed(1)}%</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-3">
-          <div
-            className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-300"
-            style={{ width: `${completionPercentage}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Export/Import buttons */}
-      <div className="space-y-2">
-        <button
-          onClick={handleExport}
-          className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors font-medium"
-        >
-          Export Checklist (JSON)
-        </button>
-        <button
-          onClick={handleImport}
-          className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
-        >
-          Import Checklist (JSON)
-        </button>
-      </div>
-
-      {/* Info */}
-      <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-        <p className="text-xs text-gray-600">
-          Export your checklist to save a backup or share with others. Import to restore
-          from a previous export.
-        </p>
       </div>
     </div>
   );

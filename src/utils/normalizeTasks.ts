@@ -13,6 +13,7 @@ export function normalizeTasks(rawTasks: string[]): ChecklistItem[] {
   const normalized = rawTasks
     .map((task) => {
       // Remove common numbering patterns: "1.", "1)", "1 -", etc.
+      // eslint-disable-next-line no-useless-escape
       let cleaned = task.replace(/^\s*\d+[\.\)]\s*/, '');
 
       // Remove bullet points: -, *, •, ◦, etc.
