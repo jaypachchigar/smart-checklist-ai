@@ -33,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!apiKey) {
     console.error('GEMINI_API_KEY environment variable is not set');
     return res.status(500).json({
-      error: 'Server configuration error. Please contact the administrator.'
+      error: 'Server configuration error. API key missing.'
     });
   }
 
