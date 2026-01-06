@@ -49,7 +49,7 @@ Do not include numbering or bullet points - just the task text.`;
     const fullPrompt = `${systemPrompt}\n\nUser request: ${prompt}\n\nTasks:`;
 
     // Make the REST API call to Gemini
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
       method: 'POST',
