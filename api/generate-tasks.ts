@@ -2,6 +2,7 @@
  * Vercel Serverless Function
  * Proxies requests to Google Gemini API
  * Keeps API key secure on the server
+ * Using gemini-pro model with v1 API
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
