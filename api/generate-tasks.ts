@@ -53,8 +53,8 @@ Do not include numbering or bullet points - just the task text.`;
 
     const fullPrompt = `${systemPrompt}\n\nUser request: ${prompt}\n\nTasks:`;
 
-    // Call Gemini API - using v1 API with gemini-1.5-pro (stable model)
-    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
+    // Call Gemini API - using v1 API with gemini-2.0-flash (correct model for 2026)
+    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
       method: 'POST',
