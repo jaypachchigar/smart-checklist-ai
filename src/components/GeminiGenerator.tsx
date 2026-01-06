@@ -7,21 +7,43 @@
  * - Normalizes and inserts tasks
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { generateTasks } from '../utils/gemini';
 import { parseGeminiResponse, normalizeTasks } from '../utils/normalizeTasks';
 import { ChecklistItem } from '../types';
+
+const STORAGE_KEY_API_KEY = 'gemini-api-key';
 
 interface GeminiGeneratorProps {
   onTasksGenerated: (tasks: ChecklistItem[]) => void;
 }
 
 export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
-  const [apiKey, setApiKey] = useState('');
+  // Load API key from localStorage on mount
+  const [apiKey, setApiKey] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY_API_KEY) || '';
+    } catch {
+      return '';
+    }
+  });
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showApiKey, setShowApiKey] = useState(false);
+
+  // Save API key to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      if (apiKey.trim()) {
+        localStorage.setItem(STORAGE_KEY_API_KEY, apiKey.trim());
+      } else {
+        localStorage.removeItem(STORAGE_KEY_API_KEY);
+      }
+    } catch (error) {
+      console.error('Failed to save API key to localStorage:', error);
+    }
+  }, [apiKey]);
 
   const handleGenerate = async () => {
     if (!apiKey.trim()) {

@@ -29,7 +29,7 @@ interface GeminiResponse {
 
 /**
  * Generates tasks using Google Gemini API
- * Model: gemini-pro (stable and reliable)
+ * Model: gemini-1.5-flash-latest (fast and efficient)
  * Uses REST API directly for maximum compatibility
  */
 export async function generateTasks(params: GenerateTasksParams): Promise<string> {
@@ -48,8 +48,8 @@ Do not include numbering or bullet points - just the task text.`;
 
     const fullPrompt = `${systemPrompt}\n\nUser request: ${prompt}\n\nTasks:`;
 
-    // Make the REST API call to Gemini
-    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
+    // Make the REST API call to Gemini - using v1beta with gemini-1.5-flash-latest
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
       method: 'POST',
