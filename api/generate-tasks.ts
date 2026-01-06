@@ -27,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Get API key from environment variable
+  // Get API key from environment variable - using gemini-pro v1 stable
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
