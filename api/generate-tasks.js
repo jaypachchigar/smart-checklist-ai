@@ -2,32 +2,15 @@
  * Vercel Serverless Function
  * Proxies requests to Google Gemini API
  * Keeps API key secure on the server
- * DEPLOYMENT 2026-01-06: Using gemini-1.5-pro with v1 API
  */
 
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-interface GeminiResponse {
-  candidates?: Array<{
-    content?: {
-      parts?: Array<{
-        text?: string;
-      }>;
-    };
-  }>;
-  error?: {
-    message: string;
-    code?: number;
-  };
-}
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Get API key from environment variable - using gemini-pro v1 stable
+  // Get API key from environment variable
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
@@ -48,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Use the prompt directly - it's already formatted from the client
     const fullPrompt = prompt;
 
-    // Call Gemini API - using v1 API with gemini-2.0-flash (correct model for 2026)
+    // Call Gemini API - using v1 API with gemini-2.0-flash
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
@@ -80,7 +63,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       );
     }
 
-    const data: GeminiResponse = await response.json();
+    const data = await response.json();
 
     // Handle API errors in response
     if (data.error) {
