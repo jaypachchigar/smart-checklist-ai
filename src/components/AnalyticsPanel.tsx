@@ -66,53 +66,53 @@ export function AnalyticsPanel({
   };
 
   return (
-    <div className="border p-4 bg-gray-800 border-gray-700">
-      <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+    <div className="stats-bar">
+      <div className="stats-container">
         {/* Stats - spread horizontally */}
-        <div className="flex-1 grid grid-cols-3 gap-4">
-          <div>
-            <p className="text-xs text-gray-500">Total</p>
-            <p className="text-lg font-bold text-white">{totalSteps}</p>
+        <div className="stats-grid">
+          <div className="stat-item">
+            <p className="stat-label">total</p>
+            <p className="stat-number">{totalSteps}</p>
           </div>
 
-          <div>
-            <p className="text-xs text-gray-500">Completed</p>
-            <p className="text-lg font-bold text-green-600">{completedSteps}</p>
+          <div className="stat-item">
+            <p className="stat-label">done</p>
+            <p className="stat-number done">{completedSteps}</p>
           </div>
 
-          <div>
-            <p className="text-xs text-gray-500">Locked</p>
-            <p className="text-lg font-bold text-orange-600">{hiddenSteps}</p>
+          <div className="stat-item">
+            <p className="stat-label">locked</p>
+            <p className="stat-number locked">{hiddenSteps}</p>
           </div>
         </div>
 
         {/* Progress bar */}
-        <div className="flex-1">
-          <div className="flex justify-between text-xs mb-1 text-gray-500">
-            <span>Progress</span>
-            <span className="font-medium">{completionPercentage.toFixed(0)}%</span>
+        <div className="progress-area">
+          <div className="progress-info">
+            <span>progress</span>
+            <span className="progress-percent">{completionPercentage.toFixed(0)}%</span>
           </div>
-          <div className="w-full h-2 bg-gray-700">
+          <div className="progress-track">
             <div
-              className="bg-green-600 h-full"
+              className="progress-fill"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
         </div>
 
         {/* Export/Import buttons */}
-        <div className="flex gap-2">
+        <div className="data-buttons">
           <button
             onClick={handleExport}
-            className="px-3 py-2 border text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
+            className="data-btn"
           >
-            Export
+            ↓ export
           </button>
           <button
             onClick={handleImport}
-            className="px-3 py-2 border text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
+            className="data-btn"
           >
-            Import
+            ↑ import
           </button>
         </div>
       </div>

@@ -73,25 +73,25 @@ export function ChecklistBuilder({
   };
 
   return (
-    <div className="border p-4 h-full flex flex-col bg-gray-800 border-gray-700">
-      <h2 className="text-lg font-bold mb-4 text-white">Builder Mode</h2>
+    <div className="main-panel">
+      <h2 className="panel-title">✏️ Build Your List</h2>
 
       {/* Add new item */}
-      <div className="mb-4">
-        <div className="flex gap-2">
+      <div className="add-task-section">
+        <div className="task-input-wrapper">
           <input
             type="text"
             value={newItemTitle}
             onChange={(e) => setNewItemTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
-            placeholder="Add new task..."
-            className="flex-1 px-3 py-2 border bg-gray-900 border-gray-600 text-white placeholder-gray-500"
+            placeholder="what needs to get done?"
+            className="task-input"
           />
           <button
             onClick={handleAddItem}
-            className="px-4 py-2 border bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+            className="add-btn"
           >
-            Add
+            + Add it
           </button>
         </div>
       </div>
@@ -103,11 +103,11 @@ export function ChecklistBuilder({
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <div className="space-y-2 flex-1 overflow-auto">
+          <div className="tasks-container">
             {items.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                <p className="text-sm">No tasks yet</p>
-                <p className="text-xs mt-1">Add one above or use AI</p>
+              <div className="empty-state">
+                <p className="empty-main">nothing here yet!</p>
+                <p className="empty-hint">start by adding a task above, or let AI help you out 👆</p>
               </div>
             ) : (
               items.map((item) => (
@@ -198,24 +198,24 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
     <div
       ref={setNodeRef}
       style={style}
-      className="border p-3 bg-gray-900 border-gray-600"
+      className="task-card"
     >
-      <div className="flex items-start gap-3">
+      <div className="task-content">
         {/* Drag handle */}
         <div
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing text-gray-500"
+          className="drag-handle"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path d="M7 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-6 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
           </svg>
         </div>
 
-        <div className="flex-1">
+        <div className="task-body">
           {/* Title (editable) */}
           {isEditing ? (
-            <div className="space-y-2">
+            <div className="edit-mode">
               <input
                 type="text"
                 value={editValue}
@@ -224,30 +224,30 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   if (e.key === 'Enter') handleSave();
                   if (e.key === 'Escape') handleCancel();
                 }}
-                className="w-full px-2 py-1 border text-sm bg-gray-900 border-gray-600 text-white"
+                className="edit-input"
                 autoFocus
               />
-              <div className="flex gap-2">
+              <div className="edit-actions">
                 <button
                   onClick={handleSave}
-                  className="px-3 py-1 text-xs border bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+                  className="save-btn"
                 >
-                  Save
+                  ✓ save
                 </button>
                 <button
                   onClick={handleCancel}
-                  className="px-3 py-1 text-xs border bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700"
+                  className="cancel-btn"
                 >
-                  Cancel
+                  cancel
                 </button>
               </div>
             </div>
           ) : (
             <div>
-              <p className="text-sm text-white">{item.title}</p>
+              <p className="task-title-text">{item.title}</p>
               {item.dependency && (
-                <p className="text-xs mt-1 text-orange-400">
-                  Depends on: {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
+                <p className="dependency-note">
+                  needs: {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
                 </p>
               )}
             </div>
@@ -256,8 +256,8 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
           {/* Dependency selector and AI options */}
           {!isEditing && (
             <>
-              <div className="mt-2 flex items-center gap-2">
-                <label className="text-xs text-gray-500">Depends on:</label>
+              <div className="dependency-picker">
+                <label className="depends-label">depends on</label>
                 <select
                   value={item.dependency || ''}
                   onChange={(e) =>
@@ -265,9 +265,9 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                       dependency: e.target.value || null,
                     })
                   }
-                  className="flex-1 text-xs border px-2 py-1 bg-gray-900 border-gray-600 text-white"
+                  className="depends-select"
                 >
-                  <option value="">None</option>
+                  <option value="">nothing</option>
                   {allItems
                     .filter((i) => i.id !== item.id)
                     .map((i) => (
@@ -279,21 +279,21 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
               </div>
 
               {/* AI Options */}
-              <div className="mt-2 flex gap-2">
+              <div className="ai-tools">
                 <button
                   onClick={handleRewrite}
                   disabled={aiLoading !== null}
-                  className="px-2 py-1 text-xs border disabled:opacity-50 bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
+                  className="ai-btn"
                 >
-                  {aiLoading === 'rewrite' ? 'Rewriting...' : 'AI Rewrite'}
+                  {aiLoading === 'rewrite' ? '✨ rewriting...' : '✨ rephrase'}
                 </button>
 
                 <button
                   onClick={handleGenerateSubSteps}
                   disabled={aiLoading !== null}
-                  className="px-2 py-1 text-xs border disabled:opacity-50 bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
+                  className="ai-btn"
                 >
-                  {aiLoading === 'substeps' ? 'Generating...' : 'Sub-steps'}
+                  {aiLoading === 'substeps' ? '🤖 thinking...' : '🤖 break it down'}
                 </button>
               </div>
             </>
@@ -302,18 +302,18 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
 
         {/* Actions */}
         {!isEditing && (
-          <div className="flex gap-2">
+          <div className="task-actions">
             <button
               onClick={() => setIsEditing(true)}
-              className="text-xs text-gray-400 hover:text-white"
+              className="action-link edit-link"
             >
-              Edit
+              edit
             </button>
             <button
               onClick={() => onDelete(item.id)}
-              className="text-xs text-red-600 hover:text-red-700"
+              className="action-link delete-link"
             >
-              Delete
+              delete
             </button>
           </div>
         )}

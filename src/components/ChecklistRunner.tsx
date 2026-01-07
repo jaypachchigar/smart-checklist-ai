@@ -29,26 +29,26 @@ export function ChecklistRunner({
   ).length;
 
   return (
-    <div className="border p-4 h-full flex flex-col bg-gray-800 border-gray-700">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-white">Runner Mode</h2>
+    <div className="main-panel">
+      <div className="runner-header">
+        <h2 className="panel-title">✓ Get Stuff Done</h2>
         <button
           onClick={onReset}
-          className="px-3 py-2 border text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
+          className="reset-btn"
         >
-          Reset
+          start over
         </button>
       </div>
 
       {/* Progress indicator */}
-      <div className="mb-4">
-        <div className="flex justify-between text-xs mb-1 text-gray-500">
-          <span>Progress</span>
-          <span className="text-green-600">{completedCount} / {items.length}</span>
+      <div className="progress-section">
+        <div className="progress-label">
+          <span>how far you've gotten</span>
+          <span className="progress-count">{completedCount} / {items.length}</span>
         </div>
-        <div className="w-full h-2 bg-gray-700">
+        <div className="progress-track">
           <div
-            className="bg-green-600 h-full"
+            className="progress-fill"
             style={{
               width: items.length > 0 ? `${(completedCount / items.length) * 100}%` : '0%',
             }}
@@ -57,32 +57,32 @@ export function ChecklistRunner({
       </div>
 
       {/* Visible tasks */}
-      <div className="space-y-2 flex-1 overflow-auto">
+      <div className="tasks-container">
         {visibleItems.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            <p className="text-sm">
-              {items.length === 0 ? 'No tasks to run' : 'All tasks completed!'}
+          <div className="empty-state">
+            <p className="empty-main">
+              {items.length === 0 ? 'nothing to do yet!' : 'nice work, you\'re all done! 🎉'}
             </p>
           </div>
         ) : (
           visibleItems.map((item) => (
             <div
               key={item.id}
-              className="border p-3 bg-gray-900 border-gray-600"
+              className="runner-task"
             >
-              <label className="flex items-start gap-3 cursor-pointer">
+              <label className="task-checkbox-label">
                 <input
                   type="checkbox"
                   checked={completedIds.has(item.id)}
                   onChange={() => onToggleComplete(item.id)}
-                  className="mt-0.5 w-4 h-4 cursor-pointer"
+                  className="task-checkbox"
                   style={{ accentColor: '#16a34a' }}
                 />
                 <p
-                  className={`text-sm ${
+                  className={`runner-task-text ${
                     completedIds.has(item.id)
-                      ? 'line-through text-gray-500'
-                      : 'text-white'
+                      ? 'completed'
+                      : ''
                   }`}
                 >
                   {item.title}
@@ -95,9 +95,9 @@ export function ChecklistRunner({
 
       {/* Hidden items indicator */}
       {hiddenItems.length > 0 && (
-        <div className="mt-4 p-3 border bg-orange-900/20 border-orange-700">
-          <p className="text-xs text-orange-300">
-            {hiddenItems.length} {hiddenItems.length === 1 ? 'task' : 'tasks'} locked (dependencies not met)
+        <div className="locked-notice">
+          <p className="locked-text">
+            {hiddenItems.length} {hiddenItems.length === 1 ? 'task is' : 'tasks are'} still locked 🔒
           </p>
         </div>
       )}

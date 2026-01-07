@@ -63,21 +63,21 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
   };
 
   return (
-    <div className="border p-4 h-full flex flex-col bg-gray-800 border-gray-700">
-      <h2 className="text-lg font-bold mb-4 text-white">AI Generator</h2>
+    <div className="ai-panel">
+      <h2 className="panel-title">🤖 AI Helper</h2>
 
-      <div className="space-y-3 flex-1 flex flex-col">
+      <div className="ai-content">
         {/* Prompt input */}
-        <div className="flex-1 flex flex-col">
-          <label className="block text-xs mb-2 text-gray-400">
-            Describe your tasks
+        <div className="prompt-section">
+          <label className="prompt-label">
+            tell me what you need done
           </label>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="e.g., Create an onboarding checklist for new customers"
+            placeholder="like... plan a birthday party, study for finals, organize my room"
             rows={4}
-            className="w-full px-3 py-2 border text-sm flex-1 bg-gray-900 border-gray-600 text-white placeholder-gray-500"
+            className="prompt-input"
           />
         </div>
 
@@ -85,22 +85,22 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
         <button
           onClick={handleGenerate}
           disabled={isLoading}
-          className="w-full px-4 py-2 border text-sm disabled:opacity-50 bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+          className="generate-btn"
         >
-          {isLoading ? 'Generating...' : 'Generate with AI'}
+          {isLoading ? '✨ working on it...' : '✨ generate tasks'}
         </button>
 
         {/* Error message */}
         {error && (
-          <div className="p-3 bg-red-900/20 border border-red-700">
-            <p className="text-xs text-red-400">{error}</p>
+          <div className="error-box">
+            <p className="error-text">{error}</p>
           </div>
         )}
 
         {/* Info box */}
-        <div className="p-3 border bg-gray-700/20 border-gray-600">
-          <p className="text-xs text-gray-400">
-            AI will generate 5-8 actionable tasks based on your description.
+        <div className="info-box">
+          <p className="info-text">
+            i'll come up with 5-8 tasks to help you get it done
           </p>
         </div>
       </div>

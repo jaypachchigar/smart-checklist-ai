@@ -37,45 +37,34 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="app-wrapper">
+      <div className="app-container">
         {/* Header with Analytics */}
-        <header className="mb-6">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-white">
-                Smart Checklist
+        <header className="app-header">
+          <div className="header-top">
+            <div className="app-branding">
+              <h1 className="app-title">
+                checklist
               </h1>
-              <p className="text-sm text-gray-400">
-                Task management with AI
+              <p className="app-subtitle">
+                get your stuff organized
               </p>
             </div>
 
             {/* Controls: Mode toggle */}
-            <div className="flex items-center gap-3">
-              {/* Mode toggle */}
-              <div className="p-1 inline-flex border bg-gray-800 border-gray-700">
-                <button
-                  onClick={() => setMode('builder')}
-                  className={`px-5 py-2 text-sm font-medium ${
-                    mode === 'builder'
-                      ? 'bg-gray-700 text-white'
-                      : 'text-gray-400 hover:text-gray-200'
-                  }`}
-                >
-                  Builder
-                </button>
-                <button
-                  onClick={() => setMode('runner')}
-                  className={`px-5 py-2 text-sm font-medium ${
-                    mode === 'runner'
-                      ? 'bg-gray-700 text-white'
-                      : 'text-gray-400 hover:text-gray-200'
-                  }`}
-                >
-                  Runner
-                </button>
-              </div>
+            <div className="mode-switcher">
+              <button
+                onClick={() => setMode('builder')}
+                className={`mode-btn ${mode === 'builder' ? 'active' : ''}`}
+              >
+                📝 build
+              </button>
+              <button
+                onClick={() => setMode('runner')}
+                className={`mode-btn ${mode === 'runner' ? 'active' : ''}`}
+              >
+                ✓ run
+              </button>
             </div>
           </div>
 
@@ -89,9 +78,9 @@ function App() {
         </header>
 
         {/* Main content - Equal heights */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:items-start">
+        <div className="main-grid">
           {/* Main column: Builder or Runner */}
-          <div className="lg:col-span-3 flex flex-col">
+          <div className="main-column">
             {mode === 'builder' ? (
               <ChecklistBuilder
                 items={items}
@@ -111,7 +100,7 @@ function App() {
           </div>
 
           {/* Right sidebar: AI Generator - Same height */}
-          <div className="lg:col-span-1 flex flex-col">
+          <div className="sidebar-column">
             <GeminiGenerator onTasksGenerated={handleTasksGenerated} />
           </div>
         </div>
