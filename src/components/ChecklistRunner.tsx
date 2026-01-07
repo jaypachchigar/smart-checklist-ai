@@ -7,7 +7,6 @@
  */
 
 import { ChecklistItem } from '../types';
-import { useDependencies } from '../hooks/useDependencies';
 
 interface ChecklistRunnerProps {
   items: ChecklistItem[];
@@ -22,8 +21,6 @@ export function ChecklistRunner({
   onToggleComplete,
   onReset,
 }: ChecklistRunnerProps) {
-  const { visibleItems, hiddenItems } = useDependencies(items, completedIds);
-
   const completedCount = Array.from(completedIds).filter((id) =>
     items.some((item) => item.id === id)
   ).length;
@@ -56,16 +53,18 @@ export function ChecklistRunner({
         </div>
       </div>
 
-      {/* Visible tasks */}
+      {/* Tasks */}
       <div className="tasks-container">
-        {visibleItems.length === 0 ? (
+        {items.length === 0 ? (
           <div className="empty-state">
-            <p className="empty-main">
-              {items.length === 0 ? 'Nothing to do yet' : 'All done'}
-            </p>
+            <p className="empty-main">Nothing to do yet</p>
+          </div>
+        ) : completedCount === items.length ? (
+          <div className="empty-state">
+            <p className="empty-main">All done</p>
           </div>
         ) : (
-          visibleItems.map((item) => (
+          items.map((item) => (
             <div
               key={item.id}
               className="runner-task"
@@ -76,7 +75,7 @@ export function ChecklistRunner({
                   checked={completedIds.has(item.id)}
                   onChange={() => onToggleComplete(item.id)}
                   className="task-checkbox"
-                  style={{ accentColor: '#2e7d32' }}
+                  style={{ accentColor: '#16a34a' }}
                 />
                 <p
                   className={`runner-task-text ${
@@ -92,15 +91,6 @@ export function ChecklistRunner({
           ))
         )}
       </div>
-
-      {/* Hidden items indicator */}
-      {hiddenItems.length > 0 && (
-        <div className="locked-notice">
-          <p className="locked-text">
-            {hiddenItems.length} {hiddenItems.length === 1 ? 'task is' : 'tasks are'} locked - finish dependencies first
-          </p>
-        </div>
-      )}
     </div>
   );
 }

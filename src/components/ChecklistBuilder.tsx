@@ -245,58 +245,28 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
           ) : (
             <div>
               <p className="task-title-text">{item.title}</p>
-              {item.dependency && (
-                <p className="dependency-note">
-                  Needs: {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
-                </p>
-              )}
             </div>
           )}
 
-          {/* Dependency selector and AI options */}
+          {/* AI Options */}
           {!isEditing && (
-            <>
-              <div className="dependency-picker">
-                <label className="depends-label">Depends on</label>
-                <select
-                  value={item.dependency || ''}
-                  onChange={(e) =>
-                    onUpdate(item.id, {
-                      dependency: e.target.value || null,
-                    })
-                  }
-                  className="depends-select"
-                >
-                  <option value="">Nothing</option>
-                  {allItems
-                    .filter((i) => i.id !== item.id)
-                    .map((i) => (
-                      <option key={i.id} value={i.id}>
-                        {i.title}
-                      </option>
-                    ))}
-                </select>
-              </div>
+            <div className="ai-tools">
+              <button
+                onClick={handleRewrite}
+                disabled={aiLoading !== null}
+                className="ai-btn"
+              >
+                {aiLoading === 'rewrite' ? 'Rewriting...' : 'Rephrase'}
+              </button>
 
-              {/* AI Options */}
-              <div className="ai-tools">
-                <button
-                  onClick={handleRewrite}
-                  disabled={aiLoading !== null}
-                  className="ai-btn"
-                >
-                  {aiLoading === 'rewrite' ? 'Rewriting...' : 'Rephrase'}
-                </button>
-
-                <button
-                  onClick={handleGenerateSubSteps}
-                  disabled={aiLoading !== null}
-                  className="ai-btn"
-                >
-                  {aiLoading === 'substeps' ? 'Thinking...' : 'Break It Down'}
-                </button>
-              </div>
-            </>
+              <button
+                onClick={handleGenerateSubSteps}
+                disabled={aiLoading !== null}
+                className="ai-btn"
+              >
+                {aiLoading === 'substeps' ? 'Thinking...' : 'Break It Down'}
+              </button>
+            </div>
           )}
         </div>
 

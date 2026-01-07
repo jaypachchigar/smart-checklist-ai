@@ -7,7 +7,6 @@
  */
 
 import { ChecklistItem } from '../types';
-import { useDependencies } from '../hooks/useDependencies';
 
 interface AnalyticsPanelProps {
   items: ChecklistItem[];
@@ -22,13 +21,10 @@ export function AnalyticsPanel({
   exportData,
   importData,
 }: AnalyticsPanelProps) {
-  const { hiddenItems } = useDependencies(items, completedIds);
-
   const totalSteps = items.length;
   const completedSteps = Array.from(completedIds).filter((id) =>
     items.some((item) => item.id === id)
   ).length;
-  const hiddenSteps = hiddenItems.length;
   const completionPercentage = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
 
   const handleExport = () => {
@@ -81,8 +77,8 @@ export function AnalyticsPanel({
           </div>
 
           <div className="stat-item">
-            <p className="stat-label">Locked</p>
-            <p className="stat-number locked">{hiddenSteps}</p>
+            <p className="stat-label">Left</p>
+            <p className="stat-number">{totalSteps - completedSteps}</p>
           </div>
         </div>
 
