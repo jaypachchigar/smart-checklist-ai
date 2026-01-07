@@ -31,19 +31,19 @@ export function ChecklistRunner({
   return (
     <div className="main-panel">
       <div className="runner-header">
-        <h2 className="panel-title">get stuff done</h2>
+        <h2 className="panel-title">Get Stuff Done</h2>
         <button
           onClick={onReset}
           className="reset-btn"
         >
-          start over
+          Start Over
         </button>
       </div>
 
       {/* Progress indicator */}
       <div className="progress-section">
         <div className="progress-label">
-          <span>progress</span>
+          <span>Progress</span>
           <span className="progress-count">{completedCount} / {items.length}</span>
         </div>
         <div className="progress-track">
@@ -61,7 +61,7 @@ export function ChecklistRunner({
         {visibleItems.length === 0 ? (
           <div className="empty-state">
             <p className="empty-main">
-              {items.length === 0 ? 'nothing to do yet' : 'all done'}
+              {items.length === 0 ? 'Nothing to do yet' : 'All done'}
             </p>
           </div>
         ) : (

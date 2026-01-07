@@ -74,7 +74,7 @@ export function ChecklistBuilder({
 
   return (
     <div className="main-panel">
-      <h2 className="panel-title">build your list</h2>
+      <h2 className="panel-title">Build Your List</h2>
 
       {/* Add new item */}
       <div className="add-task-section">
@@ -84,14 +84,14 @@ export function ChecklistBuilder({
             value={newItemTitle}
             onChange={(e) => setNewItemTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
-            placeholder="what needs to get done?"
+            placeholder="What needs to get done?"
             className="task-input"
           />
           <button
             onClick={handleAddItem}
             className="add-btn"
           >
-            add task
+            Add Task
           </button>
         </div>
       </div>
@@ -106,8 +106,8 @@ export function ChecklistBuilder({
           <div className="tasks-container">
             {items.length === 0 ? (
               <div className="empty-state">
-                <p className="empty-main">nothing here yet</p>
-                <p className="empty-hint">start by adding a task above or use the ai helper</p>
+                <p className="empty-main">Nothing here yet</p>
+                <p className="empty-hint">Start by adding a task above or use the AI helper</p>
               </div>
             ) : (
               items.map((item) => (
@@ -232,13 +232,13 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   onClick={handleSave}
                   className="save-btn"
                 >
-                  save
+                  Save
                 </button>
                 <button
                   onClick={handleCancel}
                   className="cancel-btn"
                 >
-                  cancel
+                  Cancel
                 </button>
               </div>
             </div>
@@ -247,7 +247,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
               <p className="task-title-text">{item.title}</p>
               {item.dependency && (
                 <p className="dependency-note">
-                  needs: {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
+                  Needs: {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
                 </p>
               )}
             </div>
@@ -257,7 +257,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
           {!isEditing && (
             <>
               <div className="dependency-picker">
-                <label className="depends-label">depends on</label>
+                <label className="depends-label">Depends on</label>
                 <select
                   value={item.dependency || ''}
                   onChange={(e) =>
@@ -267,7 +267,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   }
                   className="depends-select"
                 >
-                  <option value="">nothing</option>
+                  <option value="">Nothing</option>
                   {allItems
                     .filter((i) => i.id !== item.id)
                     .map((i) => (
@@ -285,7 +285,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   disabled={aiLoading !== null}
                   className="ai-btn"
                 >
-                  {aiLoading === 'rewrite' ? 'rewriting...' : 'rephrase'}
+                  {aiLoading === 'rewrite' ? 'Rewriting...' : 'Rephrase'}
                 </button>
 
                 <button
@@ -293,7 +293,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   disabled={aiLoading !== null}
                   className="ai-btn"
                 >
-                  {aiLoading === 'substeps' ? 'thinking...' : 'break it down'}
+                  {aiLoading === 'substeps' ? 'Thinking...' : 'Break It Down'}
                 </button>
               </div>
             </>
@@ -307,13 +307,13 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
               onClick={() => setIsEditing(true)}
               className="action-link edit-link"
             >
-              edit
+              Edit
             </button>
             <button
               onClick={() => onDelete(item.id)}
               className="action-link delete-link"
             >
-              delete
+              Delete
             </button>
           </div>
         )}

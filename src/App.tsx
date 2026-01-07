@@ -44,10 +44,10 @@ function App() {
           <div className="header-top">
             <div className="app-branding">
               <h1 className="app-title">
-                checklist
+                Checklist
               </h1>
               <p className="app-subtitle">
-                get your stuff organized
+                Get your stuff organized
               </p>
             </div>
 
@@ -57,13 +57,13 @@ function App() {
                 onClick={() => setMode('builder')}
                 className={`mode-btn ${mode === 'builder' ? 'active' : ''}`}
               >
-                build
+                Build
               </button>
               <button
                 onClick={() => setMode('runner')}
                 className={`mode-btn ${mode === 'runner' ? 'active' : ''}`}
               >
-                run
+                Run
               </button>
             </div>
           </div>

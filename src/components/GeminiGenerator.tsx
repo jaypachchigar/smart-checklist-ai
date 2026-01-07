@@ -64,18 +64,18 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
 
   return (
     <div className="ai-panel">
-      <h2 className="panel-title">ai helper</h2>
+      <h2 className="panel-title">AI Helper</h2>
 
       <div className="ai-content">
         {/* Prompt input */}
         <div className="prompt-section">
           <label className="prompt-label">
-            what do you need to do?
+            What do you need to do?
           </label>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="plan a birthday party, study for finals, organize my room, etc"
+            placeholder="Plan a birthday party, study for finals, organize my room, etc"
             rows={4}
             className="prompt-input"
           />
@@ -87,7 +87,7 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
           disabled={isLoading}
           className="generate-btn"
         >
-          {isLoading ? 'working on it...' : 'generate tasks'}
+          {isLoading ? 'Working on it...' : 'Generate Tasks'}
         </button>
 
         {/* Error message */}
@@ -100,7 +100,7 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
         {/* Info box */}
         <div className="info-box">
           <p className="info-text">
-            will generate 5-8 tasks based on your description
+            Will generate 5-8 tasks based on your description
           </p>
         </div>
       </div>

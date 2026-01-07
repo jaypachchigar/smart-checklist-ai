@@ -71,17 +71,17 @@ export function AnalyticsPanel({
         {/* Stats - spread horizontally */}
         <div className="stats-grid">
           <div className="stat-item">
-            <p className="stat-label">total</p>
+            <p className="stat-label">Total</p>
             <p className="stat-number">{totalSteps}</p>
           </div>
 
           <div className="stat-item">
-            <p className="stat-label">done</p>
+            <p className="stat-label">Done</p>
             <p className="stat-number done">{completedSteps}</p>
           </div>
 
           <div className="stat-item">
-            <p className="stat-label">locked</p>
+            <p className="stat-label">Locked</p>
             <p className="stat-number locked">{hiddenSteps}</p>
           </div>
         </div>
@@ -89,7 +89,7 @@ export function AnalyticsPanel({
         {/* Progress bar */}
         <div className="progress-area">
           <div className="progress-info">
-            <span>progress</span>
+            <span>Progress</span>
             <span className="progress-percent">{completionPercentage.toFixed(0)}%</span>
           </div>
           <div className="progress-track">
@@ -106,13 +106,13 @@ export function AnalyticsPanel({
             onClick={handleExport}
             className="data-btn"
           >
-            export
+            Export
           </button>
           <button
             onClick={handleImport}
             className="data-btn"
           >
-            import
+            Import
           </button>
         </div>
       </div>
