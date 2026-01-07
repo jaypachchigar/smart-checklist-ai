@@ -65,7 +65,7 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
   };
 
   return (
-    <div className={`rounded border p-4 h-full flex flex-col ${
+    <div className={`border p-4 h-full flex flex-col ${
       theme === 'dark'
         ? 'bg-gray-800 border-gray-700'
         : 'bg-white border-gray-300'
@@ -83,7 +83,7 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="e.g., Create an onboarding checklist for new customers"
             rows={4}
-            className={`w-full px-3 py-2 border text-sm rounded flex-1 ${
+            className={`w-full px-3 py-2 border text-sm flex-1 ${
               theme === 'dark'
                 ? 'bg-gray-900 border-gray-600 text-white placeholder-gray-500'
                 : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
@@ -95,7 +95,7 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
         <button
           onClick={handleGenerate}
           disabled={isLoading}
-          className={`w-full px-4 py-2 rounded border text-sm disabled:opacity-50 ${
+          className={`w-full px-4 py-2 border text-sm disabled:opacity-50 ${
             theme === 'dark'
               ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-600'
               : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-300'
@@ -106,13 +106,13 @@ export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
 
         {/* Error message */}
         {error && (
-          <div className="p-3 bg-red-900/20 border border-red-700 rounded">
+          <div className="p-3 bg-red-900/20 border border-red-700">
             <p className="text-xs text-red-400">{error}</p>
           </div>
         )}
 
         {/* Info box */}
-        <div className={`p-3 border rounded ${
+        <div className={`p-3 border ${
           theme === 'dark'
             ? 'bg-gray-700/20 border-gray-600'
             : 'bg-gray-100 border-gray-300'

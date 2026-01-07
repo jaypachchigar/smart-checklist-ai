@@ -60,14 +60,14 @@ function App() {
             {/* Controls: Mode toggle + Theme toggle */}
             <div className="flex items-center gap-3">
               {/* Mode toggle */}
-              <div className={`rounded p-1 inline-flex border ${
+              <div className={`rounded-sm p-1 inline-flex border ${
                 theme === 'dark'
                   ? 'bg-gray-800 border-gray-700'
                   : 'bg-white border-gray-300'
               }`}>
                 <button
                   onClick={() => setMode('builder')}
-                  className={`px-5 py-2 rounded text-sm font-medium ${
+                  className={`px-5 py-2 rounded-sm text-sm font-medium ${
                     mode === 'builder'
                       ? theme === 'dark'
                         ? 'bg-gray-700 text-white'
@@ -81,7 +81,7 @@ function App() {
                 </button>
                 <button
                   onClick={() => setMode('runner')}
-                  className={`px-5 py-2 rounded text-sm font-medium ${
+                  className={`px-5 py-2 rounded-sm text-sm font-medium ${
                     mode === 'runner'
                       ? theme === 'dark'
                         ? 'bg-gray-700 text-white'
@@ -98,7 +98,7 @@ function App() {
               {/* Theme toggle button */}
               <button
                 onClick={toggleTheme}
-                className={`p-2 rounded border ${
+                className={`p-2 rounded-sm border ${
                   theme === 'dark'
                     ? 'bg-gray-800 border-gray-700 text-gray-300 hover:text-white'
                     : 'bg-white border-gray-300 text-gray-600 hover:text-gray-900'
@@ -154,13 +154,6 @@ function App() {
             <GeminiGenerator onTasksGenerated={handleTasksGenerated} />
           </div>
         </div>
-
-        {/* Footer */}
-        <footer className={`mt-8 text-center text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>
-          <p>
-            Built with React + TypeScript + Gemini AI
-          </p>
-        </footer>
       </div>
     </div>
   );

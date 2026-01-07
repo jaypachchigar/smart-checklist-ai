@@ -68,7 +68,7 @@ export function AnalyticsPanel({
   };
 
   return (
-    <div className={`rounded border p-4 ${
+    <div className={`border p-4 ${
       theme === 'dark'
         ? 'bg-gray-800 border-gray-700'
         : 'bg-white border-gray-300'
@@ -98,13 +98,13 @@ export function AnalyticsPanel({
             <span>Progress</span>
             <span className="font-medium">{completionPercentage.toFixed(0)}%</span>
           </div>
-          <div className={`w-full rounded h-2 ${
+          <div className={`w-full h-2 ${
             theme === 'dark'
               ? 'bg-gray-700'
               : 'bg-gray-200'
           }`}>
             <div
-              className="bg-green-600 h-full rounded"
+              className="bg-green-600 h-full"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
@@ -114,7 +114,7 @@ export function AnalyticsPanel({
         <div className="flex gap-2">
           <button
             onClick={handleExport}
-            className={`px-3 py-2 rounded border text-xs ${
+            className={`px-3 py-2 border text-xs ${
               theme === 'dark'
                 ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
@@ -124,7 +124,7 @@ export function AnalyticsPanel({
           </button>
           <button
             onClick={handleImport}
-            className={`px-3 py-2 rounded border text-xs ${
+            className={`px-3 py-2 border text-xs ${
               theme === 'dark'
                 ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'

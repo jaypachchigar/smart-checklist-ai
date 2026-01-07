@@ -75,7 +75,7 @@ export function ChecklistBuilder({
   };
 
   return (
-    <div className={`rounded border p-4 h-full flex flex-col ${
+    <div className={`border p-4 h-full flex flex-col ${
       theme === 'dark'
         ? 'bg-gray-800 border-gray-700'
         : 'bg-white border-gray-300'
@@ -91,7 +91,7 @@ export function ChecklistBuilder({
             onChange={(e) => setNewItemTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
             placeholder="Add new task..."
-            className={`flex-1 px-3 py-2 border rounded ${
+            className={`flex-1 px-3 py-2 border ${
               theme === 'dark'
                 ? 'bg-gray-900 border-gray-600 text-white placeholder-gray-500'
                 : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
@@ -99,7 +99,7 @@ export function ChecklistBuilder({
           />
           <button
             onClick={handleAddItem}
-            className={`px-4 py-2 rounded border ${
+            className={`px-4 py-2 border ${
               theme === 'dark'
                 ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-600'
                 : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-300'
@@ -213,7 +213,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
     <div
       ref={setNodeRef}
       style={style}
-      className={`border rounded p-3 ${
+      className={`border p-3 ${
         theme === 'dark'
           ? 'bg-gray-900 border-gray-600'
           : 'bg-gray-50 border-gray-300'
@@ -247,7 +247,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   if (e.key === 'Enter') handleSave();
                   if (e.key === 'Escape') handleCancel();
                 }}
-                className={`w-full px-2 py-1 border rounded text-sm ${
+                className={`w-full px-2 py-1 border text-sm ${
                   theme === 'dark'
                     ? 'bg-gray-900 border-gray-600 text-white'
                     : 'bg-white border-gray-300 text-gray-900'
@@ -257,7 +257,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
               <div className="flex gap-2">
                 <button
                   onClick={handleSave}
-                  className={`px-3 py-1 text-xs rounded border ${
+                  className={`px-3 py-1 text-xs border ${
                     theme === 'dark'
                       ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-600'
                       : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-300'
@@ -267,7 +267,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                 </button>
                 <button
                   onClick={handleCancel}
-                  className={`px-3 py-1 text-xs rounded border ${
+                  className={`px-3 py-1 text-xs border ${
                     theme === 'dark'
                       ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700'
                       : 'bg-white hover:bg-gray-100 text-gray-700 border-gray-300'
@@ -300,7 +300,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                       dependency: e.target.value || null,
                     })
                   }
-                  className={`flex-1 text-xs border rounded px-2 py-1 ${
+                  className={`flex-1 text-xs border px-2 py-1 ${
                     theme === 'dark'
                       ? 'bg-gray-900 border-gray-600 text-white'
                       : 'bg-white border-gray-300 text-gray-900'
@@ -322,7 +322,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                 <button
                   onClick={handleRewrite}
                   disabled={aiLoading !== null}
-                  className={`px-2 py-1 text-xs rounded border disabled:opacity-50 ${
+                  className={`px-2 py-1 text-xs border disabled:opacity-50 ${
                     theme === 'dark'
                       ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
@@ -334,7 +334,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                 <button
                   onClick={handleGenerateSubSteps}
                   disabled={aiLoading !== null}
-                  className={`px-2 py-1 text-xs rounded border disabled:opacity-50 ${
+                  className={`px-2 py-1 text-xs border disabled:opacity-50 ${
                     theme === 'dark'
                       ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'

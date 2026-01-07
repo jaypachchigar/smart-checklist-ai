@@ -31,7 +31,7 @@ export function ChecklistRunner({
   ).length;
 
   return (
-    <div className={`rounded border p-4 h-full flex flex-col ${
+    <div className={`border p-4 h-full flex flex-col ${
       theme === 'dark'
         ? 'bg-gray-800 border-gray-700'
         : 'bg-white border-gray-300'
@@ -40,7 +40,7 @@ export function ChecklistRunner({
         <h2 className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Runner Mode</h2>
         <button
           onClick={onReset}
-          className={`px-3 py-2 rounded border text-xs ${
+          className={`px-3 py-2 border text-xs ${
             theme === 'dark'
               ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
               : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
@@ -56,13 +56,13 @@ export function ChecklistRunner({
           <span>Progress</span>
           <span className="text-green-600">{completedCount} / {items.length}</span>
         </div>
-        <div className={`w-full rounded h-2 ${
+        <div className={`w-full h-2 ${
           theme === 'dark'
             ? 'bg-gray-700'
             : 'bg-gray-200'
         }`}>
           <div
-            className="bg-green-600 h-full rounded"
+            className="bg-green-600 h-full"
             style={{
               width: items.length > 0 ? `${(completedCount / items.length) * 100}%` : '0%',
             }}
@@ -82,7 +82,7 @@ export function ChecklistRunner({
           visibleItems.map((item) => (
             <div
               key={item.id}
-              className={`border rounded p-3 ${
+              className={`border p-3 ${
                 theme === 'dark'
                   ? 'bg-gray-900 border-gray-600'
                   : 'bg-gray-50 border-gray-300'
@@ -113,7 +113,7 @@ export function ChecklistRunner({
 
       {/* Hidden items indicator */}
       {hiddenItems.length > 0 && (
-        <div className={`mt-4 p-3 rounded border ${
+        <div className={`mt-4 p-3 border ${
           theme === 'dark'
             ? 'bg-orange-900/20 border-orange-700'
             : 'bg-orange-50 border-orange-200'
