@@ -5,6 +5,12 @@
   min-height: 100vh;
   background: #fafafa;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .app-container {
@@ -676,27 +682,286 @@
 }
 
 /* Mobile responsiveness */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .app-container {
-    padding: 16px;
+    padding: 12px;
+  }
+
+  .app-header {
+    margin-bottom: 16px;
+  }
+
+  .header-top {
+    gap: 12px;
+    margin-bottom: 16px;
   }
 
   .app-title {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .app-subtitle {
+    font-size: 13px;
+  }
+
+  /* Better mobile toggle */
+  .mode-switcher {
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    padding: 3px;
+  }
+
+  .mode-btn {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+
+  /* Stats adjustments */
+  .stats-bar {
+    padding: 12px;
+  }
+
+  .stats-container {
+    gap: 12px;
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+
+  .stat-number {
+    font-size: 18px;
+  }
+
+  .progress-area {
+    padding-top: 8px;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .progress-info {
+    font-size: 11px;
+  }
+
+  .progress-track {
+    height: 6px;
+  }
+
+  .data-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .data-btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  /* Main grid mobile */
+  .main-grid {
+    gap: 16px;
+  }
+
+  /* Panels on mobile */
+  .main-panel,
+  .ai-panel {
+    padding: 16px;
+    min-height: 300px;
+  }
+
+  .panel-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* Task input mobile */
+  .task-input-wrapper {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .task-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .add-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  /* Task cards mobile */
+  .task-card {
+    padding: 12px;
+  }
+
+  .task-content {
+    gap: 10px;
+  }
+
+  .task-title-text {
+    font-size: 15px;
+  }
+
+  .dependency-picker {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .depends-select {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .ai-tools {
+    flex-direction: column;
+  }
+
+  .ai-btn {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   .task-actions {
     flex-direction: row;
+    gap: 12px;
+  }
+
+  .action-link {
+    font-size: 14px;
+  }
+
+  /* Runner mobile */
+  .runner-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .reset-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .runner-task {
+    padding: 14px;
+  }
+
+  .runner-task-text {
+    font-size: 15px;
+  }
+
+  .task-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* AI panel mobile */
+  .prompt-label {
+    font-size: 14px;
+  }
+
+  .prompt-input {
+    font-size: 15px;
+    padding: 12px;
+    min-height: 120px;
+  }
+
+  .generate-btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .info-text,
+  .error-text {
+    font-size: 13px;
+  }
+
+  /* Edit mode mobile */
+  .edit-input {
+    font-size: 15px;
+    padding: 10px 12px;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 380px) {
+  .app-container {
+    padding: 8px;
+  }
+
+  .app-title {
+    font-size: 18px;
+  }
+
+  .app-subtitle {
+    font-size: 12px;
+  }
+
+  .stats-bar {
+    padding: 10px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .stat-number {
+    font-size: 16px;
+  }
+
+  .mode-btn {
+    padding: 10px;
+    font-size: 14px;
   }
 
   .main-panel,
   .ai-panel {
-    padding: 16px;
-    min-height: 400px;
+    padding: 12px;
+  }
+
+  .task-card {
+    padding: 10px;
+  }
+
+  .add-task-section {
+    margin-bottom: 12px;
   }
 }
