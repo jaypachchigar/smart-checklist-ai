@@ -8,7 +8,6 @@
 
 import { ChecklistItem } from '../types';
 import { useDependencies } from '../hooks/useDependencies';
-import { useTheme } from '../contexts/ThemeContext';
 
 interface AnalyticsPanelProps {
   items: ChecklistItem[];
@@ -24,7 +23,6 @@ export function AnalyticsPanel({
   importData,
 }: AnalyticsPanelProps) {
   const { hiddenItems } = useDependencies(items, completedIds);
-  const { theme } = useTheme();
 
   const totalSteps = items.length;
   const completedSteps = Array.from(completedIds).filter((id) =>
@@ -68,41 +66,33 @@ export function AnalyticsPanel({
   };
 
   return (
-    <div className={`border p-4 ${
-      theme === 'dark'
-        ? 'bg-gray-800 border-gray-700'
-        : 'bg-white border-gray-300'
-    }`}>
+    <div className="border p-4 bg-gray-800 border-gray-700">
       <div className="flex flex-col lg:flex-row lg:items-center gap-4">
         {/* Stats - spread horizontally */}
         <div className="flex-1 grid grid-cols-3 gap-4">
           <div>
-            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Total</p>
-            <p className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{totalSteps}</p>
+            <p className="text-xs text-gray-500">Total</p>
+            <p className="text-lg font-bold text-white">{totalSteps}</p>
           </div>
 
           <div>
-            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Completed</p>
-            <p className={`text-lg font-bold text-green-600`}>{completedSteps}</p>
+            <p className="text-xs text-gray-500">Completed</p>
+            <p className="text-lg font-bold text-green-600">{completedSteps}</p>
           </div>
 
           <div>
-            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Locked</p>
-            <p className={`text-lg font-bold text-orange-600`}>{hiddenSteps}</p>
+            <p className="text-xs text-gray-500">Locked</p>
+            <p className="text-lg font-bold text-orange-600">{hiddenSteps}</p>
           </div>
         </div>
 
         {/* Progress bar */}
         <div className="flex-1">
-          <div className={`flex justify-between text-xs mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+          <div className="flex justify-between text-xs mb-1 text-gray-500">
             <span>Progress</span>
             <span className="font-medium">{completionPercentage.toFixed(0)}%</span>
           </div>
-          <div className={`w-full h-2 ${
-            theme === 'dark'
-              ? 'bg-gray-700'
-              : 'bg-gray-200'
-          }`}>
+          <div className="w-full h-2 bg-gray-700">
             <div
               className="bg-green-600 h-full"
               style={{ width: `${completionPercentage}%` }}
@@ -114,21 +104,13 @@ export function AnalyticsPanel({
         <div className="flex gap-2">
           <button
             onClick={handleExport}
-            className={`px-3 py-2 border text-xs ${
-              theme === 'dark'
-                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
-            }`}
+            className="px-3 py-2 border text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
           >
             Export
           </button>
           <button
             onClick={handleImport}
-            className={`px-3 py-2 border text-xs ${
-              theme === 'dark'
-                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
-            }`}
+            className="px-3 py-2 border text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
           >
             Import
           </button>

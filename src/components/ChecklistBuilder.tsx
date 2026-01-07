@@ -27,7 +27,6 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ChecklistItem } from '../types';
-import { useTheme } from '../contexts/ThemeContext';
 import { rewriteTask, generateSubSteps } from '../utils/gemini';
 import { parseGeminiResponse, normalizeTasks } from '../utils/normalizeTasks';
 
@@ -47,7 +46,6 @@ export function ChecklistBuilder({
   onAdd,
 }: ChecklistBuilderProps) {
   const [newItemTitle, setNewItemTitle] = useState('');
-  const { theme } = useTheme();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -75,12 +73,8 @@ export function ChecklistBuilder({
   };
 
   return (
-    <div className={`border p-4 h-full flex flex-col ${
-      theme === 'dark'
-        ? 'bg-gray-800 border-gray-700'
-        : 'bg-white border-gray-300'
-    }`}>
-      <h2 className={`text-lg font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Builder Mode</h2>
+    <div className="border p-4 h-full flex flex-col bg-gray-800 border-gray-700">
+      <h2 className="text-lg font-bold mb-4 text-white">Builder Mode</h2>
 
       {/* Add new item */}
       <div className="mb-4">
@@ -91,19 +85,11 @@ export function ChecklistBuilder({
             onChange={(e) => setNewItemTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
             placeholder="Add new task..."
-            className={`flex-1 px-3 py-2 border ${
-              theme === 'dark'
-                ? 'bg-gray-900 border-gray-600 text-white placeholder-gray-500'
-                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-            }`}
+            className="flex-1 px-3 py-2 border bg-gray-900 border-gray-600 text-white placeholder-gray-500"
           />
           <button
             onClick={handleAddItem}
-            className={`px-4 py-2 border ${
-              theme === 'dark'
-                ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-600'
-                : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-300'
-            }`}
+            className="px-4 py-2 border bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
           >
             Add
           </button>
@@ -119,7 +105,7 @@ export function ChecklistBuilder({
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           <div className="space-y-2 flex-1 overflow-auto">
             {items.length === 0 ? (
-              <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>
+              <div className="text-center py-12 text-gray-500">
                 <p className="text-sm">No tasks yet</p>
                 <p className="text-xs mt-1">Add one above or use AI</p>
               </div>
@@ -154,7 +140,6 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(item.title);
   const [aiLoading, setAiLoading] = useState<'rewrite' | 'substeps' | null>(null);
-  const { theme } = useTheme();
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: item.id });
@@ -213,22 +198,14 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
     <div
       ref={setNodeRef}
       style={style}
-      className={`border p-3 ${
-        theme === 'dark'
-          ? 'bg-gray-900 border-gray-600'
-          : 'bg-gray-50 border-gray-300'
-      }`}
+      className="border p-3 bg-gray-900 border-gray-600"
     >
       <div className="flex items-start gap-3">
         {/* Drag handle */}
         <div
           {...attributes}
           {...listeners}
-          className={`cursor-grab active:cursor-grabbing ${
-            theme === 'dark'
-              ? 'text-gray-500'
-              : 'text-gray-400'
-          }`}
+          className="cursor-grab active:cursor-grabbing text-gray-500"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <path d="M7 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-6 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
@@ -247,31 +224,19 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   if (e.key === 'Enter') handleSave();
                   if (e.key === 'Escape') handleCancel();
                 }}
-                className={`w-full px-2 py-1 border text-sm ${
-                  theme === 'dark'
-                    ? 'bg-gray-900 border-gray-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}
+                className="w-full px-2 py-1 border text-sm bg-gray-900 border-gray-600 text-white"
                 autoFocus
               />
               <div className="flex gap-2">
                 <button
                   onClick={handleSave}
-                  className={`px-3 py-1 text-xs border ${
-                    theme === 'dark'
-                      ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-600'
-                      : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-300'
-                  }`}
+                  className="px-3 py-1 text-xs border bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
                 >
                   Save
                 </button>
                 <button
                   onClick={handleCancel}
-                  className={`px-3 py-1 text-xs border ${
-                    theme === 'dark'
-                      ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700'
-                      : 'bg-white hover:bg-gray-100 text-gray-700 border-gray-300'
-                  }`}
+                  className="px-3 py-1 text-xs border bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700"
                 >
                   Cancel
                 </button>
@@ -279,9 +244,9 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
             </div>
           ) : (
             <div>
-              <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{item.title}</p>
+              <p className="text-sm text-white">{item.title}</p>
               {item.dependency && (
-                <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-orange-400' : 'text-orange-600'}`}>
+                <p className="text-xs mt-1 text-orange-400">
                   Depends on: {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
                 </p>
               )}
@@ -292,7 +257,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
           {!isEditing && (
             <>
               <div className="mt-2 flex items-center gap-2">
-                <label className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Depends on:</label>
+                <label className="text-xs text-gray-500">Depends on:</label>
                 <select
                   value={item.dependency || ''}
                   onChange={(e) =>
@@ -300,11 +265,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                       dependency: e.target.value || null,
                     })
                   }
-                  className={`flex-1 text-xs border px-2 py-1 ${
-                    theme === 'dark'
-                      ? 'bg-gray-900 border-gray-600 text-white'
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
+                  className="flex-1 text-xs border px-2 py-1 bg-gray-900 border-gray-600 text-white"
                 >
                   <option value="">None</option>
                   {allItems
@@ -322,11 +283,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                 <button
                   onClick={handleRewrite}
                   disabled={aiLoading !== null}
-                  className={`px-2 py-1 text-xs border disabled:opacity-50 ${
-                    theme === 'dark'
-                      ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
-                  }`}
+                  className="px-2 py-1 text-xs border disabled:opacity-50 bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
                 >
                   {aiLoading === 'rewrite' ? 'Rewriting...' : 'AI Rewrite'}
                 </button>
@@ -334,11 +291,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                 <button
                   onClick={handleGenerateSubSteps}
                   disabled={aiLoading !== null}
-                  className={`px-2 py-1 text-xs border disabled:opacity-50 ${
-                    theme === 'dark'
-                      ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
-                  }`}
+                  className="px-2 py-1 text-xs border disabled:opacity-50 bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600"
                 >
                   {aiLoading === 'substeps' ? 'Generating...' : 'Sub-steps'}
                 </button>
@@ -352,11 +305,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
           <div className="flex gap-2">
             <button
               onClick={() => setIsEditing(true)}
-              className={`text-xs ${
-                theme === 'dark'
-                  ? 'text-gray-400 hover:text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+              className="text-xs text-gray-400 hover:text-white"
             >
               Edit
             </button>
