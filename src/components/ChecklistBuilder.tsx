@@ -28,6 +28,8 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { ChecklistItem } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
+import { rewriteTask, generateSubSteps } from '../utils/gemini';
+import { parseGeminiResponse, normalizeTasks } from '../utils/normalizeTasks';
 
 interface ChecklistBuilderProps {
   items: ChecklistItem[];
@@ -143,6 +145,7 @@ export function ChecklistBuilder({
                   allItems={items}
                   onUpdate={onUpdate}
                   onDelete={onDelete}
+                  onAdd={onAdd}
                 />
               ))
             )}
@@ -158,11 +161,13 @@ interface SortableItemProps {
   allItems: ChecklistItem[];
   onUpdate: (id: string, updates: Partial<ChecklistItem>) => void;
   onDelete: (id: string) => void;
+  onAdd: (title: string) => void;
 }
 
-function SortableItem({ item, allItems, onUpdate, onDelete }: SortableItemProps) {
+function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(item.title);
+  const [aiLoading, setAiLoading] = useState<'rewrite' | 'substeps' | null>(null);
   const { theme } = useTheme();
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
@@ -184,6 +189,38 @@ function SortableItem({ item, allItems, onUpdate, onDelete }: SortableItemProps)
   const handleCancel = () => {
     setEditValue(item.title);
     setIsEditing(false);
+  };
+
+  const handleRewrite = async () => {
+    setAiLoading('rewrite');
+    try {
+      const rewritten = await rewriteTask(item.title);
+      onUpdate(item.id, { title: rewritten });
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to rewrite task');
+    } finally {
+      setAiLoading(null);
+    }
+  };
+
+  const handleGenerateSubSteps = async () => {
+    setAiLoading('substeps');
+    try {
+      const responseText = await generateSubSteps(item.title);
+      const rawTasks = parseGeminiResponse(responseText);
+      const normalizedTasks = normalizeTasks(rawTasks);
+
+      // Add each sub-task as a new item with dependency on current item
+      normalizedTasks.forEach((task) => {
+        onAdd(task.title);
+        // Note: We can't set dependency here directly since we don't have the new item's ID yet
+        // The user can set it manually or we could enhance this further
+      });
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to generate sub-steps');
+    } finally {
+      setAiLoading(null);
+    }
   };
 
   return (
@@ -273,33 +310,84 @@ function SortableItem({ item, allItems, onUpdate, onDelete }: SortableItemProps)
             </div>
           )}
 
-          {/* Dependency selector */}
+          {/* Dependency selector and AI options */}
           {!isEditing && (
-            <div className="mt-2.5 flex items-center gap-2">
-              <label className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Depends on:</label>
-              <select
-                value={item.dependency || ''}
-                onChange={(e) =>
-                  onUpdate(item.id, {
-                    dependency: e.target.value || null,
-                  })
-                }
-                className={`flex-1 text-xs border rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 transition-all ${
-                  theme === 'dark'
-                    ? 'bg-slate-900/40 border-slate-600/40 text-slate-200 focus:ring-slate-500'
-                    : 'bg-white border-slate-300 text-slate-900 focus:ring-slate-400'
-                }`}
-              >
-                <option value="">None</option>
-                {allItems
-                  .filter((i) => i.id !== item.id)
-                  .map((i) => (
-                    <option key={i.id} value={i.id}>
-                      {i.title}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            <>
+              <div className="mt-2.5 flex items-center gap-2">
+                <label className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Depends on:</label>
+                <select
+                  value={item.dependency || ''}
+                  onChange={(e) =>
+                    onUpdate(item.id, {
+                      dependency: e.target.value || null,
+                    })
+                  }
+                  className={`flex-1 text-xs border rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 transition-all ${
+                    theme === 'dark'
+                      ? 'bg-slate-900/40 border-slate-600/40 text-slate-200 focus:ring-slate-500'
+                      : 'bg-white border-slate-300 text-slate-900 focus:ring-slate-400'
+                  }`}
+                >
+                  <option value="">None</option>
+                  {allItems
+                    .filter((i) => i.id !== item.id)
+                    .map((i) => (
+                      <option key={i.id} value={i.id}>
+                        {i.title}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              {/* AI Options */}
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  onClick={handleRewrite}
+                  disabled={aiLoading !== null}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md transition-all border disabled:opacity-50 ${
+                    theme === 'dark'
+                      ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 border-slate-600/30'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300/50'
+                  }`}
+                  title="Rewrite this task using AI"
+                >
+                  {aiLoading === 'rewrite' ? (
+                    <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  )}
+                  <span>Rewrite with AI</span>
+                </button>
+
+                <button
+                  onClick={handleGenerateSubSteps}
+                  disabled={aiLoading !== null}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md transition-all border disabled:opacity-50 ${
+                    theme === 'dark'
+                      ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 border-slate-600/30'
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300/50'
+                  }`}
+                  title="Generate sub-steps using AI"
+                >
+                  {aiLoading === 'substeps' ? (
+                    <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                  )}
+                  <span>Generate sub-steps</span>
+                </button>
+              </div>
+            </>
           )}
         </div>
 
