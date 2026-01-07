@@ -31,8 +31,8 @@ export default async function handler(req, res) {
     // Use the prompt directly - it's already formatted from the client
     const fullPrompt = prompt;
 
-    // Call Gemini API - using v1beta API with gemini-1.5-flash
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Call Gemini API - using v1beta API with gemini-1.5-flash-latest
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
       method: 'POST',
