@@ -74,7 +74,7 @@ export function ChecklistBuilder({
 
   return (
     <div className="main-panel">
-      <h2 className="panel-title">✏️ Build Your List</h2>
+      <h2 className="panel-title">build your list</h2>
 
       {/* Add new item */}
       <div className="add-task-section">
@@ -91,7 +91,7 @@ export function ChecklistBuilder({
             onClick={handleAddItem}
             className="add-btn"
           >
-            + Add it
+            add task
           </button>
         </div>
       </div>
@@ -106,8 +106,8 @@ export function ChecklistBuilder({
           <div className="tasks-container">
             {items.length === 0 ? (
               <div className="empty-state">
-                <p className="empty-main">nothing here yet!</p>
-                <p className="empty-hint">start by adding a task above, or let AI help you out 👆</p>
+                <p className="empty-main">nothing here yet</p>
+                <p className="empty-hint">start by adding a task above or use the ai helper</p>
               </div>
             ) : (
               items.map((item) => (
@@ -232,7 +232,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   onClick={handleSave}
                   className="save-btn"
                 >
-                  ✓ save
+                  save
                 </button>
                 <button
                   onClick={handleCancel}
@@ -285,7 +285,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   disabled={aiLoading !== null}
                   className="ai-btn"
                 >
-                  {aiLoading === 'rewrite' ? '✨ rewriting...' : '✨ rephrase'}
+                  {aiLoading === 'rewrite' ? 'rewriting...' : 'rephrase'}
                 </button>
 
                 <button
@@ -293,7 +293,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   disabled={aiLoading !== null}
                   className="ai-btn"
                 >
-                  {aiLoading === 'substeps' ? '🤖 thinking...' : '🤖 break it down'}
+                  {aiLoading === 'substeps' ? 'thinking...' : 'break it down'}
                 </button>
               </div>
             </>

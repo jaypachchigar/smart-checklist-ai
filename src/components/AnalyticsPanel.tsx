@@ -106,13 +106,13 @@ export function AnalyticsPanel({
             onClick={handleExport}
             className="data-btn"
           >
-            ↓ export
+            export
           </button>
           <button
             onClick={handleImport}
             className="data-btn"
           >
-            ↑ import
+            import
           </button>
         </div>
       </div>

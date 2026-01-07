@@ -31,7 +31,7 @@ export function ChecklistRunner({
   return (
     <div className="main-panel">
       <div className="runner-header">
-        <h2 className="panel-title">✓ Get Stuff Done</h2>
+        <h2 className="panel-title">get stuff done</h2>
         <button
           onClick={onReset}
           className="reset-btn"
@@ -43,7 +43,7 @@ export function ChecklistRunner({
       {/* Progress indicator */}
       <div className="progress-section">
         <div className="progress-label">
-          <span>how far you've gotten</span>
+          <span>progress</span>
           <span className="progress-count">{completedCount} / {items.length}</span>
         </div>
         <div className="progress-track">
@@ -61,7 +61,7 @@ export function ChecklistRunner({
         {visibleItems.length === 0 ? (
           <div className="empty-state">
             <p className="empty-main">
-              {items.length === 0 ? 'nothing to do yet!' : 'nice work, you\'re all done! 🎉'}
+              {items.length === 0 ? 'nothing to do yet' : 'all done'}
             </p>
           </div>
         ) : (
@@ -76,7 +76,7 @@ export function ChecklistRunner({
                   checked={completedIds.has(item.id)}
                   onChange={() => onToggleComplete(item.id)}
                   className="task-checkbox"
-                  style={{ accentColor: '#16a34a' }}
+                  style={{ accentColor: '#2e7d32' }}
                 />
                 <p
                   className={`runner-task-text ${
@@ -97,7 +97,7 @@ export function ChecklistRunner({
       {hiddenItems.length > 0 && (
         <div className="locked-notice">
           <p className="locked-text">
-            {hiddenItems.length} {hiddenItems.length === 1 ? 'task is' : 'tasks are'} still locked 🔒
+            {hiddenItems.length} {hiddenItems.length === 1 ? 'task is' : 'tasks are'} locked - finish dependencies first
           </p>
         </div>
       )}

@@ -57,13 +57,13 @@ function App() {
                 onClick={() => setMode('builder')}
                 className={`mode-btn ${mode === 'builder' ? 'active' : ''}`}
               >
-                📝 build
+                build
               </button>
               <button
                 onClick={() => setMode('runner')}
                 className={`mode-btn ${mode === 'runner' ? 'active' : ''}`}
               >
-                ✓ run
+                run
               </button>
             </div>
           </div>
