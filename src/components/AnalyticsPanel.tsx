@@ -68,104 +68,69 @@ export function AnalyticsPanel({
   };
 
   return (
-    <div className={`backdrop-blur-sm rounded-lg border p-4 ${
+    <div className={`rounded border p-4 ${
       theme === 'dark'
-        ? 'bg-slate-800/20 border-slate-700/20'
-        : 'bg-white/60 border-slate-300/50'
+        ? 'bg-gray-800 border-gray-700'
+        : 'bg-white border-gray-300'
     }`}>
       <div className="flex flex-col lg:flex-row lg:items-center gap-4">
         {/* Stats - spread horizontally */}
         <div className="flex-1 grid grid-cols-3 gap-4">
-          <div className="flex items-center gap-3">
-            <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center border ${
-              theme === 'dark'
-                ? 'bg-slate-700/30 border-slate-600/20'
-                : 'bg-slate-200/50 border-slate-300/30'
-            }`}>
-              <svg className={`w-5 h-5 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-            </div>
-            <div>
-              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Total</p>
-              <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-900'}`}>{totalSteps}</p>
-            </div>
+          <div>
+            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Total</p>
+            <p className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{totalSteps}</p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-              <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Completed</p>
-              <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600'}`}>{completedSteps}</p>
-            </div>
+          <div>
+            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Completed</p>
+            <p className={`text-lg font-bold text-green-600`}>{completedSteps}</p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
-              <svg className="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <div>
-              <p className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Locked</p>
-              <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-amber-400' : 'text-amber-600'}`}>{hiddenSteps}</p>
-            </div>
+          <div>
+            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Locked</p>
+            <p className={`text-lg font-bold text-orange-600`}>{hiddenSteps}</p>
           </div>
         </div>
 
         {/* Progress bar */}
-        <div className="flex-1 flex items-center gap-3">
-          <div className="flex-1">
-            <div className={`flex justify-between text-xs mb-1.5 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>
-              <span className="font-medium">Progress</span>
-              <span className={`font-semibold ${theme === 'dark' ? 'text-slate-400' : 'text-slate-700'}`}>{completionPercentage.toFixed(0)}%</span>
-            </div>
-            <div className={`w-full rounded-full h-2 overflow-hidden border ${
-              theme === 'dark'
-                ? 'bg-slate-700/30 border-slate-600/20'
-                : 'bg-slate-200/50 border-slate-300/30'
-            }`}>
-              <div
-                className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full transition-all duration-500"
-                style={{ width: `${completionPercentage}%` }}
-              />
-            </div>
+        <div className="flex-1">
+          <div className={`flex justify-between text-xs mb-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+            <span>Progress</span>
+            <span className="font-medium">{completionPercentage.toFixed(0)}%</span>
+          </div>
+          <div className={`w-full rounded h-2 ${
+            theme === 'dark'
+              ? 'bg-gray-700'
+              : 'bg-gray-200'
+          }`}>
+            <div
+              className="bg-green-600 h-full rounded"
+              style={{ width: `${completionPercentage}%` }}
+            />
           </div>
         </div>
 
-        {/* Export/Import buttons - compact */}
+        {/* Export/Import buttons */}
         <div className="flex gap-2">
           <button
             onClick={handleExport}
-            className={`px-4 py-2 rounded-lg transition-all text-sm font-medium border flex items-center gap-2 ${
+            className={`px-3 py-2 rounded border text-xs ${
               theme === 'dark'
-                ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 hover:text-slate-100 border-slate-600/30'
-                : 'bg-slate-200/50 hover:bg-slate-300/60 text-slate-700 hover:text-slate-900 border-slate-300/40'
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
             }`}
-            title="Export Checklist"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <span className="hidden xl:inline">Export</span>
+            Export
           </button>
           <button
             onClick={handleImport}
-            className={`px-4 py-2 rounded-lg transition-all text-sm font-medium border flex items-center gap-2 ${
+            className={`px-3 py-2 rounded border text-xs ${
               theme === 'dark'
-                ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 hover:text-slate-100 border-slate-600/30'
-                : 'bg-slate-200/50 hover:bg-slate-300/60 text-slate-700 hover:text-slate-900 border-slate-300/40'
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
             }`}
-            title="Import Checklist"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
-            <span className="hidden xl:inline">Import</span>
+            Import
           </button>
         </div>
       </div>

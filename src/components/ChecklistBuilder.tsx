@@ -75,48 +75,37 @@ export function ChecklistBuilder({
   };
 
   return (
-    <div className={`backdrop-blur-sm rounded-xl border p-6 h-full flex flex-col ${
+    <div className={`rounded border p-4 h-full flex flex-col ${
       theme === 'dark'
-        ? 'bg-slate-800/30 border-slate-700/30'
-        : 'bg-white/60 border-slate-300/50'
+        ? 'bg-gray-800 border-gray-700'
+        : 'bg-white border-gray-300'
     }`}>
-      <div className="flex items-center gap-3 mb-6">
-        <div className={`p-2 rounded-lg border ${
-          theme === 'dark'
-            ? 'bg-slate-700/40 border-slate-600/30'
-            : 'bg-slate-200/50 border-slate-300/30'
-        }`}>
-          <svg className={`w-5 h-5 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-          </svg>
-        </div>
-        <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-900'}`}>Builder Mode</h2>
-      </div>
+      <h2 className={`text-lg font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Builder Mode</h2>
 
       {/* Add new item */}
-      <div className="mb-6">
-        <div className="flex gap-3">
+      <div className="mb-4">
+        <div className="flex gap-2">
           <input
             type="text"
             value={newItemTitle}
             onChange={(e) => setNewItemTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
-            placeholder="Enter a new task..."
-            className={`flex-1 px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
+            placeholder="Add new task..."
+            className={`flex-1 px-3 py-2 border rounded ${
               theme === 'dark'
-                ? 'bg-slate-900/40 border-slate-600/40 text-slate-100 placeholder-slate-500 focus:ring-slate-500'
-                : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:ring-slate-400'
+                ? 'bg-gray-900 border-gray-600 text-white placeholder-gray-500'
+                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
             }`}
           />
           <button
             onClick={handleAddItem}
-            className={`px-5 py-2.5 rounded-lg transition-all font-medium border ${
+            className={`px-4 py-2 rounded border ${
               theme === 'dark'
-                ? 'bg-slate-700 hover:bg-slate-600 text-slate-100 border-slate-600/40'
-                : 'bg-slate-200 hover:bg-slate-300 text-slate-900 border-slate-300'
+                ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-600'
+                : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-300'
             }`}
           >
-            Add Task
+            Add
           </button>
         </div>
       </div>
@@ -128,14 +117,11 @@ export function ChecklistBuilder({
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <div className="space-y-2.5 flex-1 overflow-auto">
+          <div className="space-y-2 flex-1 overflow-auto">
             {items.length === 0 ? (
-              <div className="text-center py-16">
-                <svg className={`w-12 h-12 mx-auto mb-3 ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>No tasks yet</p>
-                <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-500'}`}>Add one above or use AI to generate tasks</p>
+              <div className={`text-center py-12 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>
+                <p className="text-sm">No tasks yet</p>
+                <p className="text-xs mt-1">Add one above or use AI</p>
               </div>
             ) : (
               items.map((item) => (
@@ -227,10 +213,10 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
     <div
       ref={setNodeRef}
       style={style}
-      className={`backdrop-blur-sm border rounded-lg p-3.5 hover:border-opacity-80 transition-all ${
+      className={`border rounded p-3 ${
         theme === 'dark'
-          ? 'bg-slate-800/40 border-slate-700/40'
-          : 'bg-white/70 border-slate-300/60'
+          ? 'bg-gray-900 border-gray-600'
+          : 'bg-gray-50 border-gray-300'
       }`}
     >
       <div className="flex items-start gap-3">
@@ -238,10 +224,10 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
         <div
           {...attributes}
           {...listeners}
-          className={`cursor-grab active:cursor-grabbing mt-0.5 transition-colors ${
+          className={`cursor-grab active:cursor-grabbing ${
             theme === 'dark'
-              ? 'text-slate-500 hover:text-slate-400'
-              : 'text-slate-400 hover:text-slate-600'
+              ? 'text-gray-500'
+              : 'text-gray-400'
           }`}
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -252,7 +238,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
         <div className="flex-1">
           {/* Title (editable) */}
           {isEditing ? (
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               <input
                 type="text"
                 value={editValue}
@@ -261,30 +247,30 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                   if (e.key === 'Enter') handleSave();
                   if (e.key === 'Escape') handleCancel();
                 }}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 text-sm ${
+                className={`w-full px-2 py-1 border rounded text-sm ${
                   theme === 'dark'
-                    ? 'bg-slate-900/40 border-slate-600/40 text-slate-100 placeholder-slate-500 focus:ring-slate-500'
-                    : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:ring-slate-400'
+                    ? 'bg-gray-900 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
                 }`}
                 autoFocus
               />
               <div className="flex gap-2">
                 <button
                   onClick={handleSave}
-                  className={`px-3 py-1.5 text-xs rounded-md transition-all font-medium ${
+                  className={`px-3 py-1 text-xs rounded border ${
                     theme === 'dark'
-                      ? 'bg-slate-700 hover:bg-slate-600 text-slate-100'
-                      : 'bg-slate-200 hover:bg-slate-300 text-slate-900'
+                      ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-600'
+                      : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border-gray-300'
                   }`}
                 >
                   Save
                 </button>
                 <button
                   onClick={handleCancel}
-                  className={`px-3 py-1.5 text-xs rounded-md transition-all font-medium border ${
+                  className={`px-3 py-1 text-xs rounded border ${
                     theme === 'dark'
-                      ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-600/40'
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
+                      ? 'bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700'
+                      : 'bg-white hover:bg-gray-100 text-gray-700 border-gray-300'
                   }`}
                 >
                   Cancel
@@ -293,19 +279,11 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
             </div>
           ) : (
             <div>
-              <p className={`font-medium text-sm ${theme === 'dark' ? 'text-slate-100' : 'text-slate-900'}`}>{item.title}</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{item.title}</p>
               {item.dependency && (
-                <div className="flex items-center gap-1.5 mt-1.5">
-                  <svg className="w-3.5 h-3.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-amber-400/90' : 'text-amber-600'}`}>
-                    Depends on:{' '}
-                    <span className="font-medium">
-                      {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
-                    </span>
-                  </p>
-                </div>
+                <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-orange-400' : 'text-orange-600'}`}>
+                  Depends on: {allItems.find((i) => i.id === item.dependency)?.title || 'Unknown'}
+                </p>
               )}
             </div>
           )}
@@ -313,8 +291,8 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
           {/* Dependency selector and AI options */}
           {!isEditing && (
             <>
-              <div className="mt-2.5 flex items-center gap-2">
-                <label className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>Depends on:</label>
+              <div className="mt-2 flex items-center gap-2">
+                <label className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Depends on:</label>
                 <select
                   value={item.dependency || ''}
                   onChange={(e) =>
@@ -322,10 +300,10 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
                       dependency: e.target.value || null,
                     })
                   }
-                  className={`flex-1 text-xs border rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 transition-all ${
+                  className={`flex-1 text-xs border rounded px-2 py-1 ${
                     theme === 'dark'
-                      ? 'bg-slate-900/40 border-slate-600/40 text-slate-200 focus:ring-slate-500'
-                      : 'bg-white border-slate-300 text-slate-900 focus:ring-slate-400'
+                      ? 'bg-gray-900 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-900'
                   }`}
                 >
                   <option value="">None</option>
@@ -340,51 +318,29 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
               </div>
 
               {/* AI Options */}
-              <div className="mt-2 flex items-center gap-2">
+              <div className="mt-2 flex gap-2">
                 <button
                   onClick={handleRewrite}
                   disabled={aiLoading !== null}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md transition-all border disabled:opacity-50 ${
+                  className={`px-2 py-1 text-xs rounded border disabled:opacity-50 ${
                     theme === 'dark'
-                      ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 border-slate-600/30'
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300/50'
+                      ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
                   }`}
-                  title="Rewrite this task using AI"
                 >
-                  {aiLoading === 'rewrite' ? (
-                    <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                  ) : (
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  )}
-                  <span>Rewrite with AI</span>
+                  {aiLoading === 'rewrite' ? 'Rewriting...' : 'AI Rewrite'}
                 </button>
 
                 <button
                   onClick={handleGenerateSubSteps}
                   disabled={aiLoading !== null}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md transition-all border disabled:opacity-50 ${
+                  className={`px-2 py-1 text-xs rounded border disabled:opacity-50 ${
                     theme === 'dark'
-                      ? 'bg-slate-700/40 hover:bg-slate-700/60 text-slate-300 border-slate-600/30'
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300/50'
+                      ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 border-gray-600'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300'
                   }`}
-                  title="Generate sub-steps using AI"
                 >
-                  {aiLoading === 'substeps' ? (
-                    <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                  ) : (
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                    </svg>
-                  )}
-                  <span>Generate sub-steps</span>
+                  {aiLoading === 'substeps' ? 'Generating...' : 'Sub-steps'}
                 </button>
               </div>
             </>
@@ -396,21 +352,17 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd }: SortableIte
           <div className="flex gap-2">
             <button
               onClick={() => setIsEditing(true)}
-              className={`text-xs font-medium transition-colors ${
+              className={`text-xs ${
                 theme === 'dark'
-                  ? 'text-slate-400 hover:text-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'text-gray-400 hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               Edit
             </button>
             <button
               onClick={() => onDelete(item.id)}
-              className={`text-xs font-medium transition-colors ${
-                theme === 'dark'
-                  ? 'text-red-400/80 hover:text-red-300'
-                  : 'text-red-600 hover:text-red-700'
-              }`}
+              className="text-xs text-red-600 hover:text-red-700"
             >
               Delete
             </button>
