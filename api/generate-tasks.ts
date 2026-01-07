@@ -45,13 +45,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Create a well-structured prompt for task generation
-    const systemPrompt = `You are a helpful assistant that generates checklist tasks.
-Given a user's description, generate 5-8 specific, actionable tasks.
-Return ONLY the tasks, one per line, without any introduction or conclusion.
-Do not include numbering or bullet points - just the task text.`;
-
-    const fullPrompt = `${systemPrompt}\n\nUser request: ${prompt}\n\nTasks:`;
+    // Use the prompt directly - it's already formatted from the client
+    const fullPrompt = prompt;
 
     // Call Gemini API - using v1 API with gemini-2.0-flash (correct model for 2026)
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;

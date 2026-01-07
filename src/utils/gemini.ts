@@ -25,6 +25,13 @@ export async function generateTasks(params: GenerateTasksParams): Promise<string
     throw new Error('Prompt is required');
   }
 
+  const systemPrompt = `You are a helpful assistant that generates checklist tasks.
+Given a user's description, generate 5-8 specific, actionable tasks.
+Return ONLY the tasks, one per line, without any introduction or conclusion.
+Do not include numbering or bullet points - just the task text.`;
+
+  const fullPrompt = `${systemPrompt}\n\nUser request: ${prompt}\n\nTasks:`;
+
   try {
     // Call our backend API endpoint
     const response = await fetch('/api/generate-tasks', {
@@ -33,7 +40,7 @@ export async function generateTasks(params: GenerateTasksParams): Promise<string
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        prompt: prompt.trim(),
+        prompt: fullPrompt,
       }),
     });
 
