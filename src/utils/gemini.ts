@@ -22,9 +22,63 @@ interface BackendResponse {
 }
 
 /**
+ * Sleep for a specified number of milliseconds
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Check if an error is retryable (overloaded, network issues, etc.)
+ */
+function isRetryableError(error: Error): boolean {
+  const message = error.message.toLowerCase();
+  return (
+    message.includes('overloaded') ||
+    message.includes('service unavailable') ||
+    message.includes('timeout') ||
+    message.includes('network error') ||
+    message.includes('failed to fetch')
+  );
+}
+
+/**
+ * Retry wrapper with exponential backoff
+ * Automatically retries on overload and network errors
+ */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise<T> {
+  let lastError: Error;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error('Unknown error');
+
+      // Don't retry on last attempt or non-retryable errors
+      if (attempt === maxRetries || !isRetryableError(lastError)) {
+        throw lastError;
+      }
+
+      // Exponential backoff: 1s, 2s, 4s
+      const delay = baseDelay * Math.pow(2, attempt);
+      console.log(`Retrying after ${delay}ms (attempt ${attempt + 1}/${maxRetries})...`);
+      await sleep(delay);
+    }
+  }
+
+  // eslint-disable-next-line no-throw-literal
+  throw lastError!;
+}
+
+/**
  * Generates tasks using Google Gemini API via our backend
  * Model: gemini-1.5-flash-latest (fast and efficient)
- * No API key needed - handled by the server
+ * Automatically retries on overload errors
  */
 export async function generateTasks(params: GenerateTasksParams): Promise<string> {
   const { prompt } = params;
@@ -40,7 +94,7 @@ Do not include numbering or bullet points - just the task text.`;
 
   const fullPrompt = `${systemPrompt}\n\nUser request: ${prompt}\n\nTasks:`;
 
-  try {
+  return withRetry(async () => {
     // Get user's API key if configured
     const userApiKey = getUserApiKey();
 
@@ -52,7 +106,7 @@ Do not include numbering or bullet points - just the task text.`;
       },
       body: JSON.stringify({
         prompt: fullPrompt,
-        apiKey: userApiKey, // Send user's API key if available
+        apiKey: userApiKey,
       }),
     });
 
@@ -74,13 +128,7 @@ Do not include numbering or bullet points - just the task text.`;
     }
 
     return data.text;
-  } catch (error) {
-    // Handle different error types
-    if (error instanceof Error) {
-      throw new Error(`Failed to generate tasks: ${error.message}`);
-    }
-    throw new Error('Unknown error occurred while generating tasks');
-  }
+  });
 }
 
 /**
@@ -91,7 +139,7 @@ export async function rewriteTask(taskTitle: string): Promise<string> {
     throw new Error('Task title is required');
   }
 
-  try {
+  return withRetry(async () => {
     // Get user's API key if configured
     const userApiKey = getUserApiKey();
 
@@ -125,12 +173,7 @@ export async function rewriteTask(taskTitle: string): Promise<string> {
 
     // Clean up the response
     return data.text.trim().replace(/^["']|["']$/g, '');
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to rewrite task: ${error.message}`);
-    }
-    throw new Error('Unknown error occurred while rewriting task');
-  }
+  });
 }
 
 /**
@@ -141,7 +184,7 @@ export async function generateSubSteps(taskTitle: string): Promise<string> {
     throw new Error('Task title is required');
   }
 
-  try {
+  return withRetry(async () => {
     // Get user's API key if configured
     const userApiKey = getUserApiKey();
 
@@ -174,10 +217,5 @@ export async function generateSubSteps(taskTitle: string): Promise<string> {
     }
 
     return data.text;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to generate sub-steps: ${error.message}`);
-    }
-    throw new Error('Unknown error occurred while generating sub-steps');
-  }
+  });
 }

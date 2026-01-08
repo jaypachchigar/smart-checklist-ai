@@ -229,8 +229,6 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd, onAddWithDepe
         const newId = onAddWithDependencies(task.title, dependencies);
         previousSubtaskId = newId;
       });
-
-      alert(`Successfully created ${normalizedTasks.length} sub-tasks with dependencies!`);
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Failed to generate sub-steps');
     } finally {
