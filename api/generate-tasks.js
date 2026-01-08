@@ -27,15 +27,29 @@ function checkRateLimit(key) {
     timestamp => now - timestamp < RATE_LIMIT_WINDOW
   );
 
+  const remaining = Math.max(0, MAX_REQUESTS_PER_WINDOW - recentRequests.length);
+  const oldestRequest = recentRequests[0];
+  const resetTime = oldestRequest ? oldestRequest + RATE_LIMIT_WINDOW : now + RATE_LIMIT_WINDOW;
+
   if (recentRequests.length >= MAX_REQUESTS_PER_WINDOW) {
-    return false; // Rate limit exceeded
+    return {
+      allowed: false,
+      remaining: 0,
+      resetTime,
+      retryAfter: Math.ceil((resetTime - now) / 1000) // seconds
+    };
   }
 
   // Add current request
   recentRequests.push(now);
   rateLimitMap.set(key, recentRequests);
 
-  return true; // Within rate limit
+  return {
+    allowed: true,
+    remaining: remaining - 1, // -1 because we just added this request
+    resetTime,
+    retryAfter: 0
+  };
 }
 
 export default async function handler(req, res) {
@@ -46,24 +60,33 @@ export default async function handler(req, res) {
 
   // Rate limiting check
   const rateLimitKey = getRateLimitKey(req);
-  if (!checkRateLimit(rateLimitKey)) {
+  const rateLimitInfo = checkRateLimit(rateLimitKey);
+
+  // Add rate limit headers
+  res.setHeader('X-RateLimit-Limit', MAX_REQUESTS_PER_WINDOW.toString());
+  res.setHeader('X-RateLimit-Remaining', rateLimitInfo.remaining.toString());
+  res.setHeader('X-RateLimit-Reset', new Date(rateLimitInfo.resetTime).toISOString());
+
+  if (!rateLimitInfo.allowed) {
+    res.setHeader('Retry-After', rateLimitInfo.retryAfter.toString());
     return res.status(429).json({
-      error: 'Too many requests. Please wait a minute before trying again.'
+      error: `Rate limit exceeded. Please wait ${rateLimitInfo.retryAfter} seconds before trying again.`,
+      retryAfter: rateLimitInfo.retryAfter
     });
   }
 
-  // Get API key from environment variable
-  const apiKey = process.env.GEMINI_API_KEY;
+  // Get prompt and optional API key from request body
+  const { prompt, apiKey: userApiKey } = req.body;
+
+  // Use user-provided API key if available, otherwise fall back to environment variable
+  const apiKey = userApiKey || process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    console.error('GEMINI_API_KEY environment variable is not set');
-    return res.status(500).json({
-      error: 'Server configuration error. API key missing.'
+    console.error('No API key provided and GEMINI_API_KEY environment variable is not set');
+    return res.status(400).json({
+      error: 'API key required. Please configure your Gemini API key in Settings or contact the administrator.'
     });
   }
-
-  // Get prompt from request body
-  const { prompt } = req.body;
 
   if (!prompt || typeof prompt !== 'string') {
     return res.status(400).json({ error: 'Prompt is required' });

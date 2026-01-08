@@ -1,16 +1,24 @@
 /**
  * Google Gemini API integration
  * Calls our backend API which proxies requests to Gemini
- * API key is stored securely on the server
+ * API key can be provided by user or stored securely on the server
  */
 
 export interface GenerateTasksParams {
   prompt: string;
 }
 
+/**
+ * Get the user's API key from localStorage if configured
+ */
+function getUserApiKey(): string | null {
+  return localStorage.getItem('gemini_api_key');
+}
+
 interface BackendResponse {
   text?: string;
   error?: string;
+  retryAfter?: number;
 }
 
 /**
@@ -33,6 +41,9 @@ Do not include numbering or bullet points - just the task text.`;
   const fullPrompt = `${systemPrompt}\n\nUser request: ${prompt}\n\nTasks:`;
 
   try {
+    // Get user's API key if configured
+    const userApiKey = getUserApiKey();
+
     // Call our backend API endpoint
     const response = await fetch('/api/generate-tasks', {
       method: 'POST',
@@ -41,12 +52,20 @@ Do not include numbering or bullet points - just the task text.`;
       },
       body: JSON.stringify({
         prompt: fullPrompt,
+        apiKey: userApiKey, // Send user's API key if available
       }),
     });
 
     const data: BackendResponse = await response.json();
 
     if (!response.ok) {
+      // Handle rate limiting specifically
+      if (response.status === 429) {
+        const retryAfter = data.retryAfter || 60;
+        throw new Error(
+          `Rate limit exceeded. Please wait ${retryAfter} seconds before trying again.`
+        );
+      }
       throw new Error(data.error || `Request failed with status ${response.status}`);
     }
 
@@ -73,6 +92,9 @@ export async function rewriteTask(taskTitle: string): Promise<string> {
   }
 
   try {
+    // Get user's API key if configured
+    const userApiKey = getUserApiKey();
+
     const response = await fetch('/api/generate-tasks', {
       method: 'POST',
       headers: {
@@ -80,12 +102,20 @@ export async function rewriteTask(taskTitle: string): Promise<string> {
       },
       body: JSON.stringify({
         prompt: `Rewrite this task to be clearer and more actionable (respond with ONLY the rewritten task, no numbering or bullets): "${taskTitle}"`,
+        apiKey: userApiKey, // Send user's API key if available
       }),
     });
 
     const data: BackendResponse = await response.json();
 
     if (!response.ok) {
+      // Handle rate limiting specifically
+      if (response.status === 429) {
+        const retryAfter = data.retryAfter || 60;
+        throw new Error(
+          `Rate limit exceeded. Please wait ${retryAfter} seconds before trying again.`
+        );
+      }
       throw new Error(data.error || `Request failed with status ${response.status}`);
     }
 
@@ -112,6 +142,9 @@ export async function generateSubSteps(taskTitle: string): Promise<string> {
   }
 
   try {
+    // Get user's API key if configured
+    const userApiKey = getUserApiKey();
+
     const response = await fetch('/api/generate-tasks', {
       method: 'POST',
       headers: {
@@ -119,12 +152,20 @@ export async function generateSubSteps(taskTitle: string): Promise<string> {
       },
       body: JSON.stringify({
         prompt: `Break down this task into 3-5 specific sub-steps (respond with one sub-step per line, no numbering or bullets): "${taskTitle}"`,
+        apiKey: userApiKey, // Send user's API key if available
       }),
     });
 
     const data: BackendResponse = await response.json();
 
     if (!response.ok) {
+      // Handle rate limiting specifically
+      if (response.status === 429) {
+        const retryAfter = data.retryAfter || 60;
+        throw new Error(
+          `Rate limit exceeded. Please wait ${retryAfter} seconds before trying again.`
+        );
+      }
       throw new Error(data.error || `Request failed with status ${response.status}`);
     }
 

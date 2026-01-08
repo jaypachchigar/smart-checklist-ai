@@ -5,7 +5,9 @@
 export interface ChecklistItem {
   id: string;
   title: string;
-  // Optional dependency: item only appears when dependency is completed
+  // Optional dependencies: item only appears when all dependencies are completed
+  dependencies?: string[];
+  // Legacy single dependency support (for backward compatibility)
   dependency?: string | null;
 }
 

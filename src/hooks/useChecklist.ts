@@ -13,6 +13,7 @@ export interface UseChecklistReturn {
   // Builder state
   items: ChecklistItem[];
   addItem: (title: string) => void;
+  addItemWithDependencies: (title: string, dependencies?: string[]) => string;
   updateItem: (id: string, updates: Partial<ChecklistItem>) => void;
   deleteItem: (id: string) => void;
   reorderItems: (newOrder: ChecklistItem[]) => void;
@@ -85,6 +86,18 @@ export function useChecklist(): UseChecklistReturn {
     setItemsState((prev) => [...prev, newItem]);
   }, []);
 
+  const addItemWithDependencies = useCallback((title: string, dependencies?: string[]) => {
+    const newId = `item-${Date.now()}-${Math.random()}`;
+    const newItem: ChecklistItem = {
+      id: newId,
+      title,
+      dependencies: dependencies || [],
+      dependency: null,
+    };
+    setItemsState((prev) => [...prev, newItem]);
+    return newId; // Return the ID so caller can reference it
+  }, []);
+
   const updateItem = useCallback((id: string, updates: Partial<ChecklistItem>) => {
     setItemsState((prev) =>
       prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
@@ -152,6 +165,7 @@ export function useChecklist(): UseChecklistReturn {
   return {
     items,
     addItem,
+    addItemWithDependencies,
     updateItem,
     deleteItem,
     reorderItems,
