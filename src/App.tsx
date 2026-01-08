@@ -18,6 +18,7 @@ import { ChecklistItem } from './types';
 function App() {
   const [mode, setMode] = useState<'builder' | 'runner'>('builder');
   const [showSettings, setShowSettings] = useState(false);
+  const [settingsMessage, setSettingsMessage] = useState<string | undefined>();
 
   const {
     items,
@@ -37,6 +38,16 @@ function App() {
   const handleTasksGenerated = (newTasks: ChecklistItem[]) => {
     // Add AI-generated tasks to the existing list
     setItems([...items, ...newTasks]);
+  };
+
+  const handleNeedApiKey = () => {
+    setSettingsMessage('Please add your Gemini API key to use AI features.');
+    setShowSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setShowSettings(false);
+    setSettingsMessage(undefined);
   };
 
   return (
@@ -71,7 +82,10 @@ function App() {
                 </button>
               </div>
               <button
-                onClick={() => setShowSettings(true)}
+                onClick={() => {
+                  setSettingsMessage(undefined);
+                  setShowSettings(true);
+                }}
                 className="p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
                 title="Settings"
               >
@@ -119,6 +133,7 @@ function App() {
                 onDelete={deleteItem}
                 onAdd={addItem}
                 onAddWithDependencies={addItemWithDependencies}
+                onNeedApiKey={handleNeedApiKey}
               />
             ) : (
               <ChecklistRunner
@@ -132,12 +147,17 @@ function App() {
 
           {/* Right sidebar: AI Generator - Same height */}
           <div className="sidebar-column">
-            <GeminiGenerator onTasksGenerated={handleTasksGenerated} />
+            <GeminiGenerator
+              onTasksGenerated={handleTasksGenerated}
+              onNeedApiKey={handleNeedApiKey}
+            />
           </div>
         </div>
 
         {/* Settings Modal */}
-        {showSettings && <Settings onClose={() => setShowSettings(false)} />}
+        {showSettings && (
+          <Settings onClose={handleCloseSettings} showMessage={settingsMessage} />
+        )}
       </div>
     </div>
   );

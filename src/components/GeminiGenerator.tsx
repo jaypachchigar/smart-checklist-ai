@@ -10,17 +10,27 @@ import { useState } from 'react';
 import { generateTasks } from '../utils/gemini';
 import { parseGeminiResponse, normalizeTasks } from '../utils/normalizeTasks';
 import { ChecklistItem } from '../types';
+import { getStoredApiKey } from './Settings';
 
 interface GeminiGeneratorProps {
   onTasksGenerated: (tasks: ChecklistItem[]) => void;
+  onNeedApiKey: () => void;
 }
 
-export function GeminiGenerator({ onTasksGenerated }: GeminiGeneratorProps) {
+export function GeminiGenerator({ onTasksGenerated, onNeedApiKey }: GeminiGeneratorProps) {
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = async () => {
+    // Check if API key is configured
+    const apiKey = getStoredApiKey();
+    if (!apiKey) {
+      setError('API key required. Please add your Gemini API key first.');
+      onNeedApiKey();
+      return;
+    }
+
     if (!prompt.trim()) {
       setError('Please enter a prompt describing the tasks you need');
       return;

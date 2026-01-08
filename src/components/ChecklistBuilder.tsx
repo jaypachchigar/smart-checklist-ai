@@ -29,6 +29,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { ChecklistItem } from '../types';
 import { rewriteTask, generateSubSteps } from '../utils/gemini';
 import { parseGeminiResponse, normalizeTasks } from '../utils/normalizeTasks';
+import { getStoredApiKey } from './Settings';
 
 interface ChecklistBuilderProps {
   items: ChecklistItem[];
@@ -37,6 +38,7 @@ interface ChecklistBuilderProps {
   onDelete: (id: string) => void;
   onAdd: (title: string) => void;
   onAddWithDependencies: (title: string, dependencies?: string[]) => string;
+  onNeedApiKey: () => void;
 }
 
 export function ChecklistBuilder({
@@ -46,6 +48,7 @@ export function ChecklistBuilder({
   onDelete,
   onAdd,
   onAddWithDependencies,
+  onNeedApiKey,
 }: ChecklistBuilderProps) {
   const [newItemTitle, setNewItemTitle] = useState('');
 
@@ -121,6 +124,7 @@ export function ChecklistBuilder({
                   onDelete={onDelete}
                   onAdd={onAdd}
                   onAddWithDependencies={onAddWithDependencies}
+                  onNeedApiKey={onNeedApiKey}
                 />
               ))
             )}
@@ -138,9 +142,10 @@ interface SortableItemProps {
   onDelete: (id: string) => void;
   onAdd: (title: string) => void;
   onAddWithDependencies: (title: string, dependencies?: string[]) => string;
+  onNeedApiKey: () => void;
 }
 
-function SortableItem({ item, allItems, onUpdate, onDelete, onAdd, onAddWithDependencies }: SortableItemProps) {
+function SortableItem({ item, allItems, onUpdate, onDelete, onAdd, onAddWithDependencies, onNeedApiKey }: SortableItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(item.title);
   const [aiLoading, setAiLoading] = useState<'rewrite' | 'substeps' | null>(null);
@@ -171,6 +176,14 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd, onAddWithDepe
   };
 
   const handleRewrite = async () => {
+    // Check if API key is configured
+    const apiKey = getStoredApiKey();
+    if (!apiKey) {
+      alert('API key required. Please add your Gemini API key in Settings first.');
+      onNeedApiKey();
+      return;
+    }
+
     setAiLoading('rewrite');
     try {
       const rewritten = await rewriteTask(item.title);
@@ -183,6 +196,14 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd, onAddWithDepe
   };
 
   const handleGenerateSubSteps = async () => {
+    // Check if API key is configured
+    const apiKey = getStoredApiKey();
+    if (!apiKey) {
+      alert('API key required. Please add your Gemini API key in Settings first.');
+      onNeedApiKey();
+      return;
+    }
+
     setAiLoading('substeps');
     try {
       const responseText = await generateSubSteps(item.title);

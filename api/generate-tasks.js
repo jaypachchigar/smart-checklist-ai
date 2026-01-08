@@ -75,16 +75,14 @@ export default async function handler(req, res) {
     });
   }
 
-  // Get prompt and optional API key from request body
-  const { prompt, apiKey: userApiKey } = req.body;
+  // Get prompt and API key from request body
+  const { prompt, apiKey } = req.body;
 
-  // Use user-provided API key if available, otherwise fall back to environment variable
-  const apiKey = userApiKey || process.env.GEMINI_API_KEY;
-
+  // Require user to provide API key (no environment variable fallback)
   if (!apiKey) {
-    console.error('No API key provided and GEMINI_API_KEY environment variable is not set');
     return res.status(400).json({
-      error: 'API key required. Please configure your Gemini API key in Settings or contact the administrator.'
+      error: 'API key required. Please add your Gemini API key in Settings.',
+      requiresApiKey: true
     });
   }
 

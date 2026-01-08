@@ -7,20 +7,23 @@ import { useState, useEffect } from 'react';
 
 interface SettingsProps {
   onClose: () => void;
+  showMessage?: string;
 }
 
 const STORAGE_KEY = 'gemini_api_key';
 
-export function Settings({ onClose }: SettingsProps) {
+export function Settings({ onClose, showMessage }: SettingsProps) {
   const [apiKey, setApiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [hasExistingKey, setHasExistingKey] = useState(false);
 
   useEffect(() => {
     // Load existing API key from localStorage
     const storedKey = localStorage.getItem(STORAGE_KEY);
     if (storedKey) {
       setApiKey(storedKey);
+      setHasExistingKey(true);
     }
   }, []);
 
@@ -29,8 +32,10 @@ export function Settings({ onClose }: SettingsProps) {
 
     if (apiKey.trim()) {
       localStorage.setItem(STORAGE_KEY, apiKey.trim());
+      setHasExistingKey(true);
     } else {
       localStorage.removeItem(STORAGE_KEY);
+      setHasExistingKey(false);
     }
 
     setSaveStatus('saved');
@@ -43,6 +48,7 @@ export function Settings({ onClose }: SettingsProps) {
     setApiKey('');
     localStorage.removeItem(STORAGE_KEY);
     setSaveStatus('idle');
+    setHasExistingKey(false);
   };
 
   return (
@@ -72,6 +78,14 @@ export function Settings({ onClose }: SettingsProps) {
           </div>
 
           <div className="space-y-4">
+            {showMessage && (
+              <div className="bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-700 rounded-md p-3">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                  {showMessage}
+                </p>
+              </div>
+            )}
+
             <div>
               <label
                 htmlFor="apiKey"
@@ -122,17 +136,25 @@ export function Settings({ onClose }: SettingsProps) {
             <div className="flex gap-3 pt-4">
               <button
                 onClick={handleSave}
-                disabled={saveStatus === 'saving'}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+                disabled={saveStatus === 'saving' || !apiKey.trim()}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? 'Saved!' : 'Save'}
+                {saveStatus === 'saving'
+                  ? 'Saving...'
+                  : saveStatus === 'saved'
+                  ? 'Saved!'
+                  : hasExistingKey
+                  ? 'Update'
+                  : 'Save'}
               </button>
-              <button
-                onClick={handleClear}
-                className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium py-2 px-4 rounded-md transition-colors"
-              >
-                Clear
-              </button>
+              {hasExistingKey && (
+                <button
+                  onClick={handleClear}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium py-2 px-4 rounded-md transition-colors"
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
         </div>
