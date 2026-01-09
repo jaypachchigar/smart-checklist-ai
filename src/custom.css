@@ -543,21 +543,49 @@
   color: #a3a3a3;
 }
 
-/* Sub-dependency styling */
+/* Sub-dependency styling - Make it VERY obvious */
 .runner-task.sub-task {
-  border-left: 3px solid #2563eb;
-  background: #f9fafb;
+  border-left: 5px solid #2563eb;
+  background: #eff6ff;
+  margin-left: 20px !important;
+  position: relative;
+}
+
+.runner-task.sub-task::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #93c5fd;
 }
 
 .runner-task.sub-task:hover {
-  background: #f3f4f6;
+  background: #dbeafe;
+  border-left-color: #1d4ed8;
 }
 
 .sub-task-indicator {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  color: #2563eb;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.sub-task-badge {
   display: inline-block;
-  margin-right: 6px;
-  color: #737373;
-  font-size: 0.875em;
+  background: #2563eb;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-right: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* AI Panel */
@@ -828,6 +856,10 @@
     padding: 14px;
   }
 
+  .runner-task.sub-task {
+    margin-left: 15px !important;
+  }
+
   .runner-task-text {
     font-size: 15px;
   }
@@ -835,6 +867,15 @@
   .task-checkbox {
     width: 20px;
     height: 20px;
+  }
+
+  .sub-task-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+
+  .sub-task-indicator {
+    font-size: 0.9em;
   }
 
   /* AI panel mobile */

@@ -319,6 +319,7 @@ function SortableItem({ item, allItems, onUpdate, onDelete, onAdd, onAddWithDepe
                 onClick={handleGenerateSubSteps}
                 disabled={aiLoading !== null}
                 className="ai-btn"
+                title="Creates smaller sub-tasks that will appear below this task when you complete it in Run mode"
               >
                 {aiLoading === 'substeps' ? 'Thinking...' : 'Break It Down'}
               </button>

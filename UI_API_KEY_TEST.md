@@ -9,15 +9,18 @@
 ### What We've Confirmed:
 
 1. ✅ **Settings Component Created**
+
    - Location: `src/components/Settings.tsx`
    - Features: Modal, masked input, save/clear, visibility toggle
 
 2. ✅ **Backend Modified**
+
    - Location: `api/generate-tasks.js`
    - Accepts `apiKey` parameter from request body
    - Falls back to environment variable if not provided
 
 3. ✅ **Frontend Integration**
+
    - Location: `src/utils/gemini.ts`
    - Reads API key from localStorage (`gemini_api_key`)
    - Sends key in request body
@@ -36,27 +39,32 @@
 **Steps:**
 
 1. **Open the application**
+
    ```
    http://localhost:3000
    ```
 
 2. **Click the Settings icon** (⚙️ gear icon in top right)
+
    - Settings modal should appear
    - Shows "Google Gemini API Key" field
 
 3. **Enter your API key**
+
    ```
    Paste your Gemini API key (get one at: https://aistudio.google.com/apikey)
-   Or use test key: AIzaSyAGu5qWicsOMM_fhzxMXx7W5NreMACE7xE
+   Or use test key:
    ```
 
 4. **Verify visibility toggle**
+
    - By default, key should be masked: `••••••••••••`
    - Click the 👁️ eye icon
    - Key should become visible
    - Click again to hide
 
 5. **Click "Save"**
+
    - Button should show "Saving..." briefly
    - Then show "Saved!"
    - Modal can be closed
@@ -78,6 +86,7 @@
 1. **Go to Build mode**
 
 2. **Test "Generate Tasks" feature**
+
    - In the right sidebar, enter a prompt:
      ```
      Plan a vacation to Japan
@@ -86,6 +95,7 @@
    - Button should show "Generating..."
 
 3. **Verify it works**
+
    - Tasks should be generated and added to your list
    - Should see 5-8 tasks related to planning a Japan vacation
    - Examples might include:
@@ -95,6 +105,7 @@
      - etc.
 
 4. **Test "Rephrase" feature**
+
    - On any task, click "Rephrase"
    - Task title should be rewritten
    - Should see more actionable or clear wording
@@ -114,17 +125,21 @@
 **Steps:**
 
 1. **Open Browser DevTools**
+
    - Press `F12` or Right-click → Inspect
    - Go to **Network** tab
 
 2. **Make an AI request**
+
    - Use any AI feature (Generate, Rephrase, Break It Down)
 
 3. **Find the request**
+
    - Look for: `generate-tasks` in the Network tab
    - Click on it to see details
 
 4. **Check Request Payload**
+
    - Go to the "Payload" or "Request" tab
    - You should see:
      ```json
@@ -149,14 +164,17 @@
 1. **Open Settings** (⚙️ icon)
 
 2. **Click "Clear" button**
+
    - Input field should be cleared
    - API key removed from storage
 
 3. **Close and reopen Settings**
+
    - Field should be empty
    - Confirms key was removed from localStorage
 
 4. **Try to use AI features**
+
    - Should now fail with error message
    - Error should say something like:
      ```
@@ -176,28 +194,31 @@
 ### Code Flow Confirmed:
 
 1. **Settings Component** (`Settings.tsx`):
+
    ```typescript
-   localStorage.setItem('gemini_api_key', apiKey)
+   localStorage.setItem("gemini_api_key", apiKey);
    ```
 
 2. **Gemini Utility** (`gemini.ts`):
+
    ```typescript
-   const userApiKey = localStorage.getItem('gemini_api_key');
+   const userApiKey = localStorage.getItem("gemini_api_key");
    // ...
    body: JSON.stringify({
      prompt: fullPrompt,
      apiKey: userApiKey,
-   })
+   });
    ```
 
 3. **Backend API** (`api/generate-tasks.js`):
+
    ```javascript
    const { prompt, apiKey: userApiKey } = req.body;
    const apiKey = userApiKey || process.env.GEMINI_API_KEY;
 
    if (!apiKey) {
      return res.status(400).json({
-       error: 'API key required. Please configure...'
+       error: "API key required. Please configure...",
      });
    }
    ```
@@ -215,6 +236,7 @@
 ## Test Scenarios
 
 ### Scenario A: User Has Own API Key
+
 ```
 1. User opens app
 2. Clicks Settings
@@ -224,6 +246,7 @@
 ```
 
 ### Scenario B: No API Key Configured (Production)
+
 ```
 1. User opens app (no env variable set)
 2. Tries to use AI feature
@@ -234,6 +257,7 @@
 ```
 
 ### Scenario C: Environment Variable Fallback (Development)
+
 ```
 1. Developer has GEMINI_API_KEY in .env.local
 2. User doesn't configure UI key
@@ -242,6 +266,7 @@
 ```
 
 ### Scenario D: UI Key Overrides Environment
+
 ```
 1. GEMINI_API_KEY exists in env
 2. User enters different key in UI
@@ -276,38 +301,44 @@ Mark each as you verify:
 
 ## Expected Test Results
 
-| Test | Expected Behavior | Status |
-|------|-------------------|--------|
-| Open Settings | Modal appears | ⏳ Manual Test |
-| Enter API key | Field accepts input | ⏳ Manual Test |
-| Toggle visibility | Shows/hides key | ⏳ Manual Test |
-| Save key | Shows "Saved!" feedback | ⏳ Manual Test |
-| Close/reopen | Key persists | ⏳ Manual Test |
-| Generate tasks | Creates tasks using UI key | ⏳ Manual Test |
-| Rephrase task | Rewrites using UI key | ⏳ Manual Test |
-| Break it down | Creates subtasks using UI key | ⏳ Manual Test |
-| DevTools check | Request includes apiKey field | ⏳ Manual Test |
-| Clear key | Removes from storage | ⏳ Manual Test |
-| Use after clear | Shows error message | ⏳ Manual Test |
+| Test              | Expected Behavior             | Status         |
+| ----------------- | ----------------------------- | -------------- |
+| Open Settings     | Modal appears                 | ⏳ Manual Test |
+| Enter API key     | Field accepts input           | ⏳ Manual Test |
+| Toggle visibility | Shows/hides key               | ⏳ Manual Test |
+| Save key          | Shows "Saved!" feedback       | ⏳ Manual Test |
+| Close/reopen      | Key persists                  | ⏳ Manual Test |
+| Generate tasks    | Creates tasks using UI key    | ⏳ Manual Test |
+| Rephrase task     | Rewrites using UI key         | ⏳ Manual Test |
+| Break it down     | Creates subtasks using UI key | ⏳ Manual Test |
+| DevTools check    | Request includes apiKey field | ⏳ Manual Test |
+| Clear key         | Removes from storage          | ⏳ Manual Test |
+| Use after clear   | Shows error message           | ⏳ Manual Test |
 
 ---
 
 ## Troubleshooting
 
 ### Issue: Settings button not visible
+
 **Solution:** Refresh page, check browser console for errors
 
 ### Issue: Save doesn't persist
+
 **Solution:** Check browser's localStorage isn't disabled/full
 
 ### Issue: AI features don't work
+
 **Solution:**
+
 1. Verify API key is correct
 2. Check browser console for errors
 3. Open DevTools Network tab to see actual error from server
 
 ### Issue: Request doesn't include apiKey
+
 **Solution:**
+
 1. Make sure you clicked "Save" in Settings
 2. Check localStorage in DevTools:
    - Open DevTools → Application → Local Storage
@@ -319,6 +350,7 @@ Mark each as you verify:
 ## Summary
 
 **What to Test:**
+
 1. ⚙️ Configure API key in Settings UI
 2. 🤖 Use AI features (Generate, Rephrase, Break It Down)
 3. 🔍 Verify request includes your API key (DevTools)

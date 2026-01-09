@@ -207,13 +207,14 @@ export function ChecklistRunner({
                   }`}
                 >
                   {level > 0 && (
-                    <span className="sub-task-indicator" style={{
-                      marginRight: '6px',
-                      color: 'var(--text-tertiary)',
-                      fontSize: '0.875em'
-                    }}>
-                      ↳
-                    </span>
+                    <>
+                      <span className="sub-task-badge">
+                        SUB-TASK
+                      </span>
+                      <span className="sub-task-indicator">
+                        ↳
+                      </span>
+                    </>
                   )}
                   {item.title}
                 </p>
