@@ -543,6 +543,23 @@
   color: #a3a3a3;
 }
 
+/* Sub-dependency styling */
+.runner-task.sub-task {
+  border-left: 3px solid #2563eb;
+  background: #f9fafb;
+}
+
+.runner-task.sub-task:hover {
+  background: #f3f4f6;
+}
+
+.sub-task-indicator {
+  display: inline-block;
+  margin-right: 6px;
+  color: #737373;
+  font-size: 0.875em;
+}
+
 /* AI Panel */
 .ai-panel {
   min-height: auto;
