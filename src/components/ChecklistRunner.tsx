@@ -210,12 +210,16 @@ export function ChecklistRunner({
                 style={{
                   marginLeft: `${level * 24}px`, // 24px indentation per level
                 }}
+                onClick={() => onToggleComplete(item.id)}
               >
                 <label className="task-checkbox-label">
                   <input
                     type="checkbox"
                     checked={completedIds.has(item.id)}
-                    onChange={() => onToggleComplete(item.id)}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      onToggleComplete(item.id);
+                    }}
                     className="task-checkbox"
                     style={{ accentColor: '#16a34a' }}
                   />

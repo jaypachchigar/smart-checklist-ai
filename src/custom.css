@@ -511,10 +511,18 @@
   border: 1px solid #e5e5e5;
   padding: 16px;
   transition: all 0.15s;
+  cursor: pointer;
+  user-select: none;
 }
 
 .runner-task:hover {
   background: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.runner-task:active {
+  transform: translateY(0);
 }
 
 .task-checkbox-label {
@@ -591,6 +599,7 @@
   background: linear-gradient(to right, #bfdbfe 0%, #dbeafe 100%);
   border-left-color: #1d4ed8;
   box-shadow: -2px 0 12px rgba(37, 99, 235, 0.2);
+  transform: translateY(-1px) translateX(2px);
 }
 
 /* Animation for when sub-tasks appear */
@@ -636,6 +645,8 @@
 
 .runner-task.has-subtasks:hover {
   background: #dcfce7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.15);
 }
 
 .parent-indicator {
