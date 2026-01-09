@@ -543,27 +543,66 @@
   color: #a3a3a3;
 }
 
-/* Sub-dependency styling - Make it VERY obvious */
+/* Sub-dependency styling - SUPER OBVIOUS visual hierarchy */
 .runner-task.sub-task {
-  border-left: 5px solid #2563eb;
-  background: #eff6ff;
-  margin-left: 20px !important;
+  border-left: 6px solid #2563eb;
+  background: linear-gradient(to right, #e0f2fe 0%, #f0f9ff 100%);
+  margin-left: 32px !important;
   position: relative;
+  box-shadow: -2px 0 8px rgba(37, 99, 235, 0.1);
+  animation: slideInSubTask 0.3s ease-out;
 }
 
+/* Connecting line from parent to sub-task */
 .runner-task.sub-task::before {
   content: '';
   position: absolute;
-  left: -20px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
+  left: -32px;
+  top: 50%;
+  width: 24px;
+  height: 2px;
+  background: #3b82f6;
+  transform: translateY(-50%);
+}
+
+/* Vertical line connecting all sub-tasks */
+.runner-task.sub-task::after {
+  content: '';
+  position: absolute;
+  left: -32px;
+  top: -1px;
+  bottom: -1px;
+  width: 3px;
   background: #93c5fd;
+  border-radius: 2px;
+}
+
+/* First sub-task starts the line */
+.runner-task.sub-task:first-of-type::after {
+  top: 50%;
+}
+
+/* Last sub-task ends the line */
+.runner-task.sub-task:last-of-type::after {
+  bottom: 50%;
 }
 
 .runner-task.sub-task:hover {
-  background: #dbeafe;
+  background: linear-gradient(to right, #bfdbfe 0%, #dbeafe 100%);
   border-left-color: #1d4ed8;
+  box-shadow: -2px 0 12px rgba(37, 99, 235, 0.2);
+}
+
+/* Animation for when sub-tasks appear */
+@keyframes slideInSubTask {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .sub-task-indicator {
@@ -571,8 +610,8 @@
   align-items: center;
   margin-right: 8px;
   color: #2563eb;
-  font-size: 1em;
-  font-weight: 600;
+  font-size: 1.1em;
+  font-weight: 700;
 }
 
 .sub-task-badge {
@@ -580,12 +619,39 @@
   background: #2563eb;
   color: white;
   font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-right: 8px;
-  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+}
+
+/* Parent task indicator - shows it has hidden sub-tasks */
+.runner-task.has-subtasks {
+  border-left: 3px solid #16a34a;
+  background: #f0fdf4;
+}
+
+.runner-task.has-subtasks:hover {
+  background: #dcfce7;
+}
+
+.parent-indicator {
+  display: inline-flex;
+  align-items: center;
+  color: #16a34a;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* AI Panel */
@@ -857,7 +923,17 @@
   }
 
   .runner-task.sub-task {
-    margin-left: 15px !important;
+    margin-left: 24px !important;
+  }
+
+  /* Adjust connecting lines for mobile */
+  .runner-task.sub-task::before {
+    left: -24px;
+    width: 16px;
+  }
+
+  .runner-task.sub-task::after {
+    left: -24px;
   }
 
   .runner-task-text {
@@ -876,6 +952,15 @@
 
   .sub-task-indicator {
     font-size: 0.9em;
+  }
+
+  .parent-indicator svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .parent-indicator span {
+    font-size: 10px;
   }
 
   /* AI panel mobile */

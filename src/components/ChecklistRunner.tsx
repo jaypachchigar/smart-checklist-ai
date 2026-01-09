@@ -126,7 +126,7 @@ export function ChecklistRunner({
   onReset,
 }: ChecklistRunnerProps) {
   // Use the dependencies hook to determine which items should be visible
-  const { visibleItems } = useDependencies(items, completedIds);
+  const { visibleItems, hiddenItems } = useDependencies(items, completedIds);
 
   // Organize items hierarchically
   const organizedItems = organizeItemsHierarchically(items);
@@ -135,6 +135,22 @@ export function ChecklistRunner({
   const visibleOrganizedItems = organizedItems.filter(({ item }) =>
     visibleItems.some(v => v.id === item.id)
   );
+
+  // Function to check if a task has sub-tasks (visible or hidden)
+  const hasSubTasks = (taskId: string): boolean => {
+    return items.some(item => {
+      const deps = item.dependencies || (item.dependency ? [item.dependency] : []);
+      return deps.includes(taskId);
+    });
+  };
+
+  // Function to count hidden sub-tasks
+  const getHiddenSubTaskCount = (taskId: string): number => {
+    return hiddenItems.filter(item => {
+      const deps = item.dependencies || (item.dependency ? [item.dependency] : []);
+      return deps.includes(taskId);
+    }).length;
+  };
 
   const completedCount = Array.from(completedIds).filter((id) =>
     items.some((item) => item.id === id)
@@ -183,44 +199,59 @@ export function ChecklistRunner({
             <p className="empty-main">Complete the tasks above to unlock more</p>
           </div>
         ) : (
-          visibleOrganizedItems.map(({ item, level }) => (
-            <div
-              key={item.id}
-              className={`runner-task ${level > 0 ? 'sub-task' : ''}`}
-              style={{
-                marginLeft: `${level * 24}px`, // 24px indentation per level
-              }}
-            >
-              <label className="task-checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={completedIds.has(item.id)}
-                  onChange={() => onToggleComplete(item.id)}
-                  className="task-checkbox"
-                  style={{ accentColor: '#16a34a' }}
-                />
-                <p
-                  className={`runner-task-text ${
-                    completedIds.has(item.id)
-                      ? 'completed'
-                      : ''
-                  }`}
-                >
-                  {level > 0 && (
-                    <>
-                      <span className="sub-task-badge">
-                        SUB-TASK
+          visibleOrganizedItems.map(({ item, level }) => {
+            const itemHasSubTasks = hasSubTasks(item.id);
+            const hiddenSubTaskCount = getHiddenSubTaskCount(item.id);
+
+            return (
+              <div
+                key={item.id}
+                className={`runner-task ${level > 0 ? 'sub-task' : ''} ${itemHasSubTasks && level === 0 ? 'has-subtasks' : ''}`}
+                style={{
+                  marginLeft: `${level * 24}px`, // 24px indentation per level
+                }}
+              >
+                <label className="task-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={completedIds.has(item.id)}
+                    onChange={() => onToggleComplete(item.id)}
+                    className="task-checkbox"
+                    style={{ accentColor: '#16a34a' }}
+                  />
+                  <p
+                    className={`runner-task-text ${
+                      completedIds.has(item.id)
+                        ? 'completed'
+                        : ''
+                    }`}
+                  >
+                    {level > 0 && (
+                      <>
+                        <span className="sub-task-badge">
+                          SUB-TASK
+                        </span>
+                        <span className="sub-task-indicator">
+                          ↳
+                        </span>
+                      </>
+                    )}
+                    {item.title}
+                    {level === 0 && itemHasSubTasks && hiddenSubTaskCount > 0 && (
+                      <span className="parent-indicator" title={`Complete this to unlock ${hiddenSubTaskCount} sub-task${hiddenSubTaskCount > 1 ? 's' : ''}`}>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ marginLeft: '8px', verticalAlign: 'middle' }}>
+                          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM5.5 7.5A.5.5 0 0 0 5 8v1a.5.5 0 0 0 1 0V8a.5.5 0 0 0-.5-.5zm5 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 1 0V8a.5.5 0 0 0-.5-.5zM8 11.5a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 8 11.5z"/>
+                        </svg>
+                        <span style={{ fontSize: '11px', marginLeft: '4px', color: '#2563eb', fontWeight: '600' }}>
+                          +{hiddenSubTaskCount} more
+                        </span>
                       </span>
-                      <span className="sub-task-indicator">
-                        ↳
-                      </span>
-                    </>
-                  )}
-                  {item.title}
-                </p>
-              </label>
-            </div>
-          ))
+                    )}
+                  </p>
+                </label>
+              </div>
+            );
+          })
         )}
       </div>
     </div>
